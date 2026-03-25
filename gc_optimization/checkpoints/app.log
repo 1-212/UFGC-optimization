@@ -1,0 +1,491 @@
+2026-01-14 10:16:59,683 - gc_optimization - INFO - ==================================================
+2026-01-14 10:16:59,684 - gc_optimization - INFO - 应用启动
+2026-01-14 10:16:59,684 - gc_optimization - INFO - ==================================================
+2026-01-14 10:17:00,724 - gc_optimization - INFO - 应用已启动
+2026-01-14 10:17:13,773 - gc_optimization - INFO - 优化器已初始化
+2026-01-14 10:17:18,997 - gc_optimization - INFO - 优化器已初始化
+2026-01-14 10:17:19,182 - gc_optimization - INFO - 优化器已初始化
+2026-01-14 10:17:19,381 - gc_optimization - INFO - 优化器已初始化
+2026-01-14 10:17:20,215 - gc_optimization - INFO - 优化器已初始化
+2026-01-14 10:17:21,027 - gc_optimization - INFO - 第 1 轮参数已生成
+2026-01-14 10:17:23,033 - gc_optimization - INFO - 第 2 轮参数已生成
+2026-01-14 10:19:04,298 - gc_optimization - INFO - ==================================================
+2026-01-14 10:19:04,298 - gc_optimization - INFO - 应用启动
+2026-01-14 10:19:04,298 - gc_optimization - INFO - ==================================================
+2026-01-14 10:19:04,926 - gc_optimization - INFO - 应用已启动
+2026-01-14 10:32:41,586 - gc_optimization - INFO - ==================================================
+2026-01-14 10:32:41,586 - gc_optimization - INFO - 应用启动
+2026-01-14 10:32:41,586 - gc_optimization - INFO - ==================================================
+2026-01-14 10:32:41,719 - gc_optimization - ERROR - 应用崩溃: StoppingCriteria.__init__() got an unexpected keyword argument 'max_iterations'
+2026-01-14 10:32:52,099 - gc_optimization - INFO - ==================================================
+2026-01-14 10:32:52,099 - gc_optimization - INFO - 应用启动
+2026-01-14 10:32:52,099 - gc_optimization - INFO - ==================================================
+2026-01-14 10:32:53,157 - gc_optimization - ERROR - 应用崩溃: __init__() got an unexpected keyword argument 'max_iterations'
+2026-01-14 10:34:37,823 - gc_optimization - INFO - 未检测到历史数据
+2026-01-14 10:34:37,825 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:35:05,285 - gc_optimization - INFO - 历史已加载: 6 轮, 初始点已用: 6
+2026-01-14 10:35:05,285 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:35:05,562 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:35:05,562 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:35:05,562 - gc_optimization - ERROR - 恢复历史失败: 'BayesianOptimizationUI' object has no attribute 'show_history_summary'
+2026-01-14 10:35:05,603 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:35:42,561 - gc_optimization - INFO - 历史已加载: 13 轮, 初始点已用: 10
+2026-01-14 10:35:42,561 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:35:43,920 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:35:43,920 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:35:43,920 - gc_optimization - ERROR - 恢复历史失败: 'BayesianOptimizationUI' object has no attribute 'show_history_summary'
+2026-01-14 10:35:43,958 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:35:49,282 - gc_optimization - INFO - 历史已加载: 18 轮, 初始点已用: 10
+2026-01-14 10:35:49,282 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:35:53,669 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:35:53,669 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:35:53,669 - gc_optimization - ERROR - 恢复历史失败: 'BayesianOptimizationUI' object has no attribute 'show_history_summary'
+2026-01-14 10:35:53,670 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:35:53,670 - gc_optimization - INFO - 历史已加载: 18 轮, 初始点已用: 10
+2026-01-14 10:35:53,671 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:35:58,052 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:35:58,052 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:35:58,052 - gc_optimization - ERROR - 恢复历史失败: 'BayesianOptimizationUI' object has no attribute 'show_history_summary'
+2026-01-14 10:36:14,933 - gc_optimization - INFO - ==================================================
+2026-01-14 10:36:14,933 - gc_optimization - INFO - 应用启动
+2026-01-14 10:36:14,933 - gc_optimization - INFO - ==================================================
+2026-01-14 10:36:15,719 - gc_optimization - INFO - 历史已加载: 18 轮, 初始点已用: 10
+2026-01-14 10:36:15,719 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:36:20,964 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:36:20,964 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:36:20,965 - gc_optimization - ERROR - 恢复历史失败: 'BayesianOptimizationUI' object has no attribute 'show_history_summary'
+2026-01-14 10:36:21,003 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:36:55,255 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260114_103655.csv
+2026-01-14 10:36:55,280 - gc_optimization - INFO - ✓ 已重置所有数据
+2026-01-14 10:39:22,219 - gc_optimization - INFO - ==================================================
+2026-01-14 10:39:22,219 - gc_optimization - INFO - 应用启动
+2026-01-14 10:39:22,219 - gc_optimization - INFO - ==================================================
+2026-01-14 10:39:23,056 - gc_optimization - INFO - 历史已加载: 10 轮, 初始点已用: 10
+2026-01-14 10:39:23,056 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:39:23,720 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:39:23,721 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:39:23,721 - gc_optimization - ERROR - 恢复历史失败: 'BayesianOptimizationUI' object has no attribute 'show_history_summary'
+2026-01-14 10:39:23,754 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:40:00,453 - gc_optimization - INFO - ==================================================
+2026-01-14 10:40:00,453 - gc_optimization - INFO - 应用启动
+2026-01-14 10:40:00,453 - gc_optimization - INFO - ==================================================
+2026-01-14 10:40:01,229 - gc_optimization - INFO - 历史已加载: 10 轮, 初始点已用: 10
+2026-01-14 10:40:01,229 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:40:01,968 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:40:01,969 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:40:01,969 - gc_optimization - ERROR - 恢复历史失败: 'BayesianOptimizationUI' object has no attribute 'show_history_summary'
+2026-01-14 10:40:02,004 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:40:18,016 - gc_optimization - INFO - ==================================================
+2026-01-14 10:40:18,016 - gc_optimization - INFO - 应用启动
+2026-01-14 10:40:18,017 - gc_optimization - INFO - ==================================================
+2026-01-14 10:40:18,840 - gc_optimization - INFO - 历史已加载: 10 轮, 初始点已用: 10
+2026-01-14 10:40:18,840 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:40:19,520 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:40:19,520 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:40:19,520 - gc_optimization - ERROR - 恢复历史失败: 'BayesianOptimizationUI' object has no attribute 'show_history_summary'
+2026-01-14 10:40:19,551 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:41:25,322 - gc_optimization - INFO - 历史已加载: 10 轮, 初始点已用: 10
+2026-01-14 10:41:25,324 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:41:25,872 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:41:25,873 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:41:25,882 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:41:25,917 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:41:30,223 - gc_optimization - INFO - 历史已加载: 17 轮, 初始点已用: 10
+2026-01-14 10:41:30,223 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:41:32,930 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:41:32,931 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:41:32,939 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:41:32,940 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:41:32,941 - gc_optimization - INFO - 历史已加载: 17 轮, 初始点已用: 10
+2026-01-14 10:41:32,941 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:41:35,773 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:41:35,773 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:41:35,778 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:41:49,252 - gc_optimization - INFO - ==================================================
+2026-01-14 10:41:49,252 - gc_optimization - INFO - 应用启动
+2026-01-14 10:41:49,252 - gc_optimization - INFO - ==================================================
+2026-01-14 10:41:50,066 - gc_optimization - INFO - 历史已加载: 17 轮, 初始点已用: 10
+2026-01-14 10:41:50,066 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:41:53,271 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:41:53,271 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:41:53,284 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:41:53,320 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:42:31,672 - gc_optimization - INFO - ==================================================
+2026-01-14 10:42:31,672 - gc_optimization - INFO - 应用启动
+2026-01-14 10:42:31,672 - gc_optimization - INFO - ==================================================
+2026-01-14 10:42:32,463 - gc_optimization - INFO - 历史已加载: 17 轮, 初始点已用: 10
+2026-01-14 10:42:32,464 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:42:36,580 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:42:36,580 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:42:36,590 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:42:36,621 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:43:09,638 - gc_optimization - INFO - ==================================================
+2026-01-14 10:43:09,638 - gc_optimization - INFO - 应用启动
+2026-01-14 10:43:09,638 - gc_optimization - INFO - ==================================================
+2026-01-14 10:43:10,428 - gc_optimization - INFO - 历史已加载: 18 轮, 初始点已用: 10
+2026-01-14 10:43:10,428 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:43:14,971 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:43:14,971 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:43:14,982 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:43:15,014 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:47:17,318 - gc_optimization - INFO - 历史已加载: 18 轮, 初始点已用: 10
+2026-01-14 10:47:17,318 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:47:21,484 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:47:21,485 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:47:21,496 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:47:21,530 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:47:24,513 - gc_optimization - INFO - 历史已加载: 21 轮, 初始点已用: 10
+2026-01-14 10:47:24,514 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:47:30,135 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:47:30,135 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:47:30,145 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:47:30,145 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:47:30,146 - gc_optimization - INFO - 历史已加载: 21 轮, 初始点已用: 10
+2026-01-14 10:47:30,146 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:47:36,120 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:47:36,120 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:47:36,124 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:48:06,922 - gc_optimization - INFO - ==================================================
+2026-01-14 10:48:06,922 - gc_optimization - INFO - 应用启动
+2026-01-14 10:48:06,922 - gc_optimization - INFO - ==================================================
+2026-01-14 10:48:07,739 - gc_optimization - INFO - 历史已加载: 21 轮, 初始点已用: 10
+2026-01-14 10:48:07,739 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:48:14,275 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:48:14,276 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:48:14,286 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:48:14,320 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:48:20,050 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260114_104820.csv
+2026-01-14 10:48:20,125 - gc_optimization - INFO - ✓ 已重置所有数据
+2026-01-14 10:48:32,419 - gc_optimization - INFO - 历史已加载: 0 轮, 初始点已用: 0
+2026-01-14 10:48:32,419 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:49:51,821 - gc_optimization - INFO - ==================================================
+2026-01-14 10:49:51,822 - gc_optimization - INFO - 应用启动
+2026-01-14 10:49:51,822 - gc_optimization - INFO - ==================================================
+2026-01-14 10:49:52,599 - gc_optimization - INFO - 历史已加载: 1 轮, 初始点已用: 1
+2026-01-14 10:49:52,599 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:49:52,606 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:49:52,617 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:49:52,648 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 10:55:53,808 - gc_optimization - INFO - ==================================================
+2026-01-14 10:55:53,808 - gc_optimization - INFO - 应用启动
+2026-01-14 10:55:53,808 - gc_optimization - INFO - ==================================================
+2026-01-14 10:55:54,645 - gc_optimization - INFO - 历史已加载: 8 轮, 初始点已用: 8
+2026-01-14 10:55:54,646 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 10:55:54,932 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 10:55:54,932 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 10:55:54,943 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 10:55:54,974 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-14 11:04:15,020 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260114_110415.csv
+2026-01-14 11:04:15,062 - gc_optimization - INFO - ✓ 已重置所有数据
+2026-01-14 11:15:54,728 - gc_optimization - INFO - ==================================================
+2026-01-14 11:15:54,728 - gc_optimization - INFO - 应用启动
+2026-01-14 11:15:54,728 - gc_optimization - INFO - ==================================================
+2026-01-14 11:15:55,661 - gc_optimization - INFO - 历史已加载: 21 轮, 初始点已用: 10
+2026-01-14 11:15:55,661 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-14 11:16:05,924 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-14 11:16:05,924 - gc_optimization - INFO - 停止条件已重建
+2026-01-14 11:16:05,935 - gc_optimization - INFO - 历史恢复完成
+2026-01-14 11:16:05,970 - gc_optimization - INFO - 应用已启动（增强版）
+2026-01-15 09:36:20,440 - gc_optimization - INFO - ==================================================
+2026-01-15 09:36:20,442 - gc_optimization - INFO - 应用启动
+2026-01-15 09:36:20,442 - gc_optimization - INFO - ==================================================
+2026-01-15 09:36:22,135 - gc_optimization - INFO - 历史已加载: 21 轮, 初始点已用: 10
+2026-01-15 09:36:22,135 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-01-15 09:36:31,855 - gc_optimization - INFO - GP 模型基于历史样本完成拟合（标准化）
+2026-01-15 09:36:31,856 - gc_optimization - INFO - 停止条件已重建
+2026-01-15 09:36:31,881 - gc_optimization - INFO - 历史恢复完成
+2026-01-15 09:36:31,923 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 10:03:45,774 - gc_optimization - INFO - ==================================================
+2026-03-04 10:03:45,774 - gc_optimization - INFO - 应用启动
+2026-03-04 10:03:45,774 - gc_optimization - INFO - ==================================================
+2026-03-04 10:03:46,815 - gc_optimization - INFO - 历史已加载: 21 轮, 初始点已用: 10
+2026-03-04 10:03:46,815 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-04 10:03:50,889 - gc_optimization - INFO - ==================================================
+2026-03-04 10:03:50,889 - gc_optimization - INFO - 应用启动
+2026-03-04 10:03:50,889 - gc_optimization - INFO - ==================================================
+2026-03-04 10:03:51,705 - gc_optimization - INFO - 历史已加载: 21 轮, 初始点已用: 10
+2026-03-04 10:03:51,705 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-04 10:03:53,610 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-04 10:03:53,610 - gc_optimization - INFO - 停止条件已重建
+2026-03-04 10:03:53,627 - gc_optimization - INFO - 历史恢复完成
+2026-03-04 10:03:53,661 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 10:03:58,952 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-04 10:03:58,952 - gc_optimization - INFO - 停止条件已重建
+2026-03-04 10:03:58,972 - gc_optimization - INFO - 历史恢复完成
+2026-03-04 10:03:58,973 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 10:04:17,612 - gc_optimization - INFO - ==================================================
+2026-03-04 10:04:17,612 - gc_optimization - INFO - 应用启动
+2026-03-04 10:04:17,612 - gc_optimization - INFO - ==================================================
+2026-03-04 10:04:18,378 - gc_optimization - INFO - 历史已加载: 21 轮, 初始点已用: 10
+2026-03-04 10:04:18,378 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-04 10:04:24,618 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-04 10:04:24,618 - gc_optimization - INFO - 停止条件已重建
+2026-03-04 10:04:24,625 - gc_optimization - INFO - 历史恢复完成
+2026-03-04 10:04:24,659 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 10:29:48,274 - gc_optimization - INFO - ==================================================
+2026-03-04 10:29:48,276 - gc_optimization - INFO - 应用启动
+2026-03-04 10:29:48,276 - gc_optimization - INFO - ==================================================
+2026-03-04 10:29:49,047 - gc_optimization - INFO - 历史已加载: 21 轮, 初始点已用: 10
+2026-03-04 10:29:49,047 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-04 10:29:55,238 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-04 10:29:55,238 - gc_optimization - INFO - 停止条件已重建
+2026-03-04 10:29:55,247 - gc_optimization - INFO - 历史恢复完成
+2026-03-04 10:29:55,280 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 10:29:59,960 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260304_102959.csv
+2026-03-04 10:30:00,020 - gc_optimization - INFO - ✓ 已重置所有数据
+2026-03-04 10:30:28,203 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 10:30:31,505 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 10:30:34,616 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 10:30:37,988 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 10:30:41,044 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 10:30:43,983 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 10:33:13,123 - gc_optimization - INFO - ==================================================
+2026-03-04 10:33:13,123 - gc_optimization - INFO - 应用启动
+2026-03-04 10:33:13,123 - gc_optimization - INFO - ==================================================
+2026-03-04 10:33:13,884 - gc_optimization - INFO - 历史已加载: 10 轮, 初始点已用: 10
+2026-03-04 10:33:13,884 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-04 10:33:15,827 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-04 10:33:15,827 - gc_optimization - INFO - 停止条件已重建
+2026-03-04 10:33:15,836 - gc_optimization - INFO - 历史恢复完成
+2026-03-04 10:33:15,865 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 10:33:34,302 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (11, 8) + inhomogeneous part.
+2026-03-04 10:33:34,302 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (11, 8) + inhomogeneous part.
+2026-03-04 10:34:00,641 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (8,) + inhomogeneous part.
+2026-03-04 10:34:00,641 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (12, 8) + inhomogeneous part.
+2026-03-04 10:34:18,956 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (12, 8) + inhomogeneous part.
+2026-03-04 10:34:18,956 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (13, 8) + inhomogeneous part.
+2026-03-04 10:36:14,690 - gc_optimization - INFO - ==================================================
+2026-03-04 10:36:14,690 - gc_optimization - INFO - 应用启动
+2026-03-04 10:36:14,690 - gc_optimization - INFO - ==================================================
+2026-03-04 10:36:15,438 - gc_optimization - INFO - 历史已加载: 10 轮, 初始点已用: 10
+2026-03-04 10:36:15,438 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-04 10:36:17,349 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-04 10:36:17,349 - gc_optimization - INFO - 停止条件已重建
+2026-03-04 10:36:17,359 - gc_optimization - INFO - 历史恢复完成
+2026-03-04 10:36:17,390 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 10:36:25,275 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (11, 8) + inhomogeneous part.
+2026-03-04 10:36:25,275 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (11, 8) + inhomogeneous part.
+2026-03-04 10:36:30,380 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (12, 8) + inhomogeneous part.
+2026-03-04 10:36:30,380 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (12, 8) + inhomogeneous part.
+2026-03-04 10:36:41,005 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (13, 8) + inhomogeneous part.
+2026-03-04 10:36:41,005 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (13, 8) + inhomogeneous part.
+2026-03-04 10:37:06,456 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (14, 8) + inhomogeneous part.
+2026-03-04 10:37:06,456 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (14, 8) + inhomogeneous part.
+2026-03-04 10:37:12,104 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (15, 8) + inhomogeneous part.
+2026-03-04 10:37:12,104 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (15, 8) + inhomogeneous part.
+2026-03-04 10:37:15,288 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (16, 8) + inhomogeneous part.
+2026-03-04 10:37:15,288 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (16, 8) + inhomogeneous part.
+2026-03-04 10:37:20,073 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (17, 8) + inhomogeneous part.
+2026-03-04 10:37:20,073 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (17, 8) + inhomogeneous part.
+2026-03-04 10:37:23,673 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (18, 8) + inhomogeneous part.
+2026-03-04 10:37:23,673 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (18, 8) + inhomogeneous part.
+2026-03-04 10:37:28,130 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (19, 8) + inhomogeneous part.
+2026-03-04 10:37:28,130 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (19, 8) + inhomogeneous part.
+2026-03-04 10:37:31,202 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (20, 8) + inhomogeneous part.
+2026-03-04 10:37:31,202 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (20, 8) + inhomogeneous part.
+2026-03-04 10:37:36,274 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (21, 8) + inhomogeneous part.
+2026-03-04 10:37:36,274 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (21, 8) + inhomogeneous part.
+2026-03-04 10:37:47,644 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (8,) + inhomogeneous part.
+2026-03-04 10:37:47,644 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (22, 8) + inhomogeneous part.
+2026-03-04 10:37:51,188 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (22, 8) + inhomogeneous part.
+2026-03-04 10:37:51,188 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (23, 8) + inhomogeneous part.
+2026-03-04 10:37:56,316 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (23, 8) + inhomogeneous part.
+2026-03-04 10:37:56,317 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (24, 8) + inhomogeneous part.
+2026-03-04 10:37:58,732 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (24, 8) + inhomogeneous part.
+2026-03-04 10:37:58,734 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (25, 8) + inhomogeneous part.
+2026-03-04 10:38:01,813 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (25, 8) + inhomogeneous part.
+2026-03-04 10:38:01,815 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (26, 8) + inhomogeneous part.
+2026-03-04 10:38:09,775 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (26, 8) + inhomogeneous part.
+2026-03-04 10:38:09,775 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (27, 8) + inhomogeneous part.
+2026-03-04 10:38:13,655 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (27, 8) + inhomogeneous part.
+2026-03-04 10:38:13,655 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (28, 8) + inhomogeneous part.
+2026-03-04 10:38:17,199 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (28, 8) + inhomogeneous part.
+2026-03-04 10:38:17,200 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (29, 8) + inhomogeneous part.
+2026-03-04 10:38:21,159 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (29, 8) + inhomogeneous part.
+2026-03-04 10:38:21,160 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (30, 8) + inhomogeneous part.
+2026-03-04 10:38:25,921 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (30, 8) + inhomogeneous part.
+2026-03-04 10:38:25,921 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (31, 8) + inhomogeneous part.
+2026-03-04 10:38:34,074 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (31, 8) + inhomogeneous part.
+2026-03-04 10:38:34,074 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (32, 8) + inhomogeneous part.
+2026-03-04 10:38:36,713 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (32, 8) + inhomogeneous part.
+2026-03-04 10:38:36,713 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (33, 8) + inhomogeneous part.
+2026-03-04 10:38:40,097 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (33, 8) + inhomogeneous part.
+2026-03-04 10:38:40,097 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (34, 8) + inhomogeneous part.
+2026-03-04 10:38:43,097 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (34, 8) + inhomogeneous part.
+2026-03-04 10:38:43,099 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (35, 8) + inhomogeneous part.
+2026-03-04 10:38:54,906 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (35, 8) + inhomogeneous part.
+2026-03-04 10:38:54,908 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (36, 8) + inhomogeneous part.
+2026-03-04 10:39:49,695 - gc_optimization - INFO - ==================================================
+2026-03-04 10:39:49,695 - gc_optimization - INFO - 应用启动
+2026-03-04 10:39:49,695 - gc_optimization - INFO - ==================================================
+2026-03-04 10:39:50,470 - gc_optimization - INFO - 历史已加载: 36 轮, 初始点已用: 10
+2026-03-04 10:39:50,470 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-04 10:39:52,374 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-04 10:39:52,374 - gc_optimization - INFO - 停止条件已重建
+2026-03-04 10:39:52,385 - gc_optimization - INFO - 历史恢复完成
+2026-03-04 10:39:52,416 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 10:40:05,140 - gc_optimization - WARNING - 优化器更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (61, 8) + inhomogeneous part.
+2026-03-04 10:40:05,140 - gc_optimization - WARNING - GP模型更新警告: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (37, 8) + inhomogeneous part.
+2026-03-04 11:04:38,188 - gc_optimization - INFO - ==================================================
+2026-03-04 11:04:38,188 - gc_optimization - INFO - 应用启动
+2026-03-04 11:04:38,188 - gc_optimization - INFO - ==================================================
+2026-03-04 11:04:39,369 - gc_optimization - INFO - 历史已加载: 37 轮, 初始点已用: 10
+2026-03-04 11:04:39,369 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-04 11:04:41,356 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-04 11:04:41,356 - gc_optimization - INFO - 停止条件已重建
+2026-03-04 11:04:41,366 - gc_optimization - INFO - 历史恢复完成
+2026-03-04 11:04:41,399 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 11:04:50,646 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260304_110450.csv
+2026-03-04 11:04:50,702 - gc_optimization - INFO - ✓ 已重置所有数据
+2026-03-04 11:06:29,227 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:06:35,798 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:06:42,929 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:06:51,508 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:06:59,112 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:07:10,863 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:10:39,502 - gc_optimization - INFO - ==================================================
+2026-03-04 11:10:39,502 - gc_optimization - INFO - 应用启动
+2026-03-04 11:10:39,502 - gc_optimization - INFO - ==================================================
+2026-03-04 11:10:40,257 - gc_optimization - INFO - 历史已加载: 10 轮, 初始点已用: 10
+2026-03-04 11:10:40,257 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-04 11:10:42,501 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-04 11:10:42,501 - gc_optimization - INFO - 停止条件已重建
+2026-03-04 11:10:42,509 - gc_optimization - INFO - 历史恢复完成
+2026-03-04 11:10:42,539 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-04 11:10:48,755 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260304_111048.csv
+2026-03-04 11:10:48,810 - gc_optimization - INFO - ✓ 已重置所有数据
+2026-03-04 11:11:26,025 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:11:29,758 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:11:33,887 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:11:37,252 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:11:41,080 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:11:45,721 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:11:57,492 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:12:08,328 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:12:11,715 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:12:18,095 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:12:23,249 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:12:42,935 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:12:46,730 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:12:49,614 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:12:53,298 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:12:58,663 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:13:04,474 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:13:08,320 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:13:21,072 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:13:26,032 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:13:35,669 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:00,186 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:04,179 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:07,684 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:12,047 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:19,688 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:24,348 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:27,650 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:31,023 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:34,822 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-04 11:14:40,737 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:02:01,409 - gc_optimization - INFO - ==================================================
+2026-03-05 09:02:01,411 - gc_optimization - INFO - 应用启动
+2026-03-05 09:02:01,411 - gc_optimization - INFO - ==================================================
+2026-03-05 09:02:02,338 - gc_optimization - INFO - 历史已加载: 35 轮, 初始点已用: 10
+2026-03-05 09:02:02,338 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-05 09:02:12,992 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-05 09:02:12,992 - gc_optimization - INFO - 停止条件已重建
+2026-03-05 09:02:13,019 - gc_optimization - INFO - 历史恢复完成
+2026-03-05 09:02:13,055 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-05 09:23:49,450 - gc_optimization - INFO - ==================================================
+2026-03-05 09:23:49,450 - gc_optimization - INFO - 应用启动
+2026-03-05 09:23:49,450 - gc_optimization - INFO - ==================================================
+2026-03-05 09:23:50,926 - gc_optimization - INFO - 历史已加载: 35 轮, 初始点已用: 10
+2026-03-05 09:23:50,926 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-05 09:24:02,554 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-05 09:24:02,554 - gc_optimization - INFO - 停止条件已重建
+2026-03-05 09:24:02,583 - gc_optimization - INFO - 历史恢复完成
+2026-03-05 09:24:02,623 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-05 09:24:50,925 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260305_092450.csv
+2026-03-05 09:24:50,996 - gc_optimization - INFO - ✓ 已重置所有数据
+2026-03-05 09:25:28,621 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:25:31,496 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:25:34,317 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:25:37,256 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:25:42,518 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:25:45,922 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:25:49,640 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:25:54,163 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:25:57,349 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:00,741 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:03,460 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:06,215 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:08,532 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:10,764 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:13,069 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:15,892 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:20,563 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:31,428 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:35,165 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:42,791 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:50,727 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:26:56,508 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:36:24,649 - gc_optimization - INFO - ==================================================
+2026-03-05 09:36:24,649 - gc_optimization - INFO - 应用启动
+2026-03-05 09:36:24,649 - gc_optimization - INFO - ==================================================
+2026-03-05 09:36:25,414 - gc_optimization - INFO - 历史已加载: 26 轮, 初始点已用: 10
+2026-03-05 09:36:25,414 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-05 09:36:31,869 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-05 09:36:31,869 - gc_optimization - INFO - 停止条件已重建
+2026-03-05 09:36:31,882 - gc_optimization - INFO - 历史恢复完成
+2026-03-05 09:36:31,920 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-05 09:36:44,185 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260305_093644.csv
+2026-03-05 09:36:44,233 - gc_optimization - INFO - ✓ 已重置所有数据
+2026-03-05 09:38:29,365 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:38:34,186 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:38:39,549 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:38:43,792 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:38:53,741 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:38:57,684 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:39:03,045 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:39:24,155 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:39:43,167 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:52:21,629 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:52:24,884 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:52:27,528 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:52:33,472 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:52:37,396 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:52:45,685 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:56:57,639 - gc_optimization - INFO - ==================================================
+2026-03-05 09:56:57,639 - gc_optimization - INFO - 应用启动
+2026-03-05 09:56:57,639 - gc_optimization - INFO - ==================================================
+2026-03-05 09:56:58,819 - gc_optimization - INFO - 历史已加载: 19 轮, 初始点已用: 10
+2026-03-05 09:56:58,819 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-05 09:57:03,605 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-05 09:57:03,605 - gc_optimization - INFO - 停止条件已重建
+2026-03-05 09:57:03,614 - gc_optimization - INFO - 历史恢复完成
+2026-03-05 09:57:03,647 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-05 09:57:22,884 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:57:27,885 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:57:31,433 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:57:35,192 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:57:39,601 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:57:46,641 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:57:50,552 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:57:55,524 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:57:59,084 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:58:07,227 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:58:13,259 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 09:58:17,252 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 10:00:01,248 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 10:00:13,631 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 10:00:17,474 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 10:00:22,013 - gc_optimization - WARNING - GP模型更新警告: 'ARCoKPredictor' object has no attribute 'fit'
+2026-03-05 10:33:57,278 - gc_optimization - INFO - ==================================================
+2026-03-05 10:33:57,278 - gc_optimization - INFO - 应用启动
+2026-03-05 10:33:57,278 - gc_optimization - INFO - ==================================================
+2026-03-05 10:33:58,118 - gc_optimization - INFO - 历史已加载: 35 轮, 初始点已用: 10
+2026-03-05 10:33:58,118 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-03-05 10:34:10,619 - gc_optimization - INFO - 多保真度优化器已基于历史样本重建
+2026-03-05 10:34:10,619 - gc_optimization - INFO - 停止条件已重建
+2026-03-05 10:34:10,629 - gc_optimization - INFO - 历史恢复完成
+2026-03-05 10:34:10,663 - gc_optimization - INFO - 应用已启动（增强版）
+2026-03-05 10:38:00,916 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260305_103800.csv
+2026-03-05 10:38:00,972 - gc_optimization - INFO - ✓ 已重置所有数据
