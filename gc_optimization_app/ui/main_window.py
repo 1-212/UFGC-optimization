@@ -1253,12 +1253,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-def main():
-    root = tk.Tk()
-    app = BayesianOptimizationUI(root)
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()

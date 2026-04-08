@@ -1,0 +1,45 @@
+# Python编译缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 实验数据和结果
+gc_optimization/checkpoints/
+gc_optimization/visualizations/
+
+# IDE配置
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 虚拟环境
+venv/
+env/
+
+# 临时文件
+*.tmp
+*.temp
+
+# 日志文件
+*.log
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 包安装文件
+*.egg-info/
+build/
+dist/
+
+# 测试覆盖率
+.coverage
+coverage.xml
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
