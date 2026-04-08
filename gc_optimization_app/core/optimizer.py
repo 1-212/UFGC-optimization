@@ -1,18 +1,5 @@
-"""GC升温参数优化器模块
+"""GC temperature program optimizer module"""
 
-本模块实现了贝叶斯优化算法，用于自动优化气相色谱(GC)的升温程序参数。
-基于高斯过程回归(GPR)和期望改进(EI)采集函数，结合多保真度优化策略，
-实现高效、准确的参数优化。
-
-算法原理：
-1. 使用ARD Matérn核函数构建高斯过程模型
-2. 通过期望改进(EI)采集函数选择下一个评估点
-3. 结合多保真度策略平衡计算效率和优化精度
-4. 实现多种停止条件确保优化过程的收敛性
-
-作者: 研究团队
-日期: 2026年
-"""
 
 import numpy as np
 from skopt import Optimizer
@@ -21,47 +8,47 @@ from skopt.learning.gaussian_process.kernels import Matern, ConstantKernel, Whit
 from config import parameter_dimensions as dimensions, gp_optimizer_config, stopping_criteria_config
 
 def create_ard_matern_kernel():
-    """创建自动相关性确定(ARD) Matérn核函数
+    """Create Automatic Relevance Determination (ARD) Matérn kernel
     
-    ARD Matérn核能够为每个参数学习不同的长度尺度，
-    从而更好地捕捉参数间的不同重要性。
-    采用nu=2.5的Matern核，提供良好的平滑性和灵活性。
+    ARD Matérn kernel can learn different length scales for each parameter,
+    better capturing the different importance between parameters.
+    Uses nu=2.5 Matern kernel, providing good smoothness and flexibility.
     
     Returns:
-        kernel: 组合的ARD Matérn核函数
+        kernel: Combined ARD Matérn kernel function
     """
     initial_length_scales = gp_optimizer_config['initial_length_scales']
     
-    # 常数核：捕捉全局趋势
+    # Constant kernel: capture global trends
     constant_kernel = ConstantKernel(
         constant_value=1.0,
         constant_value_bounds=(1e-5, 1e5)
     )
     
-    # Matern核：捕捉局部特征和相关性
+    # Matern kernel: capture local features and correlations
     matern_kernel = Matern(
         length_scale=initial_length_scales,
         length_scale_bounds=(1e-3, 1e3),
-        nu=2.5  # 3/2阶Matern核，平衡平滑性和灵活性
+        nu=2.5  # 3/2 order Matern kernel, balance smoothness and flexibility
     )
     
-    # 白噪声核：处理观测噪声
+    # White noise kernel: handle observation noise
     white_kernel = WhiteKernel(
         noise_level=1e-5,
         noise_level_bounds=(1e-10, 1e-1)
     )
     
-    # 组合核：常数核 * Matern核 + 白噪声核
+    # Combined kernel: constant kernel * Matern kernel + white noise kernel
     kernel = constant_kernel * matern_kernel + white_kernel
     return kernel
 
 def create_gp_regressor():
-    """创建高斯过程回归器
+    """Create Gaussian Process Regressor
     
-    基于ARD Matérn核创建GPR模型，用于建模参数与评分之间的关系。
+    Create GPR model based on ARD Matérn kernel, used to model the relationship between parameters and scores.
     
     Returns:
-        gp: 配置好的高斯过程回归器
+        gp: Configured Gaussian Process Regressor
     """
     kernel = create_ard_matern_kernel()
     
@@ -76,46 +63,46 @@ def create_gp_regressor():
     return gp
 
 class BayesianOptimizer:
-    """贝叶斯优化器包装类
+    """Bayesian optimizer wrapper class
     
-    封装了skopt的Optimizer，实现了参数离散化和评分反馈功能，
-    专门用于GC升温参数的优化。
+    Encapsulates skopt's Optimizer, implements parameter discretization and score feedback functionality,
+    specifically designed for GC temperature program parameter optimization.
     """
     
     def __init__(self):
-        """初始化贝叶斯优化器
+        """Initialize Bayesian optimizer
         
-        配置优化器参数，包括搜索空间、基础估计器、采集函数等。
+        Configure optimizer parameters, including search space, base estimator, acquisition function, etc.
         """
         self.optimizer = Optimizer(
             dimensions=dimensions,
             base_estimator=create_gp_regressor(),
             acq_func=gp_optimizer_config['acquisition_function'],
-            n_initial_points=10,  # 初始采样点数
+            n_initial_points=10,  # Initial sampling points
             random_state=gp_optimizer_config['random_state']
         )
     
     def ask(self):
-        """生成候选参数点并转换为离散值
+        """Generate candidate parameter points and convert to discrete values
         
         Returns:
-            discrete_params: 离散化后的参数值列表
+            discrete_params: List of discretized parameter values
         """
         continuous_params = self.optimizer.ask()
         discrete_params = self._convert_to_discrete_values(continuous_params)
         return discrete_params
     
     def _convert_to_discrete_values(self, params):
-        """将连续参数值转换为最接近的离散值
+        """Convert continuous parameter values to nearest discrete values
         
-        根据配置的步长，将连续参数四舍五入到最接近的离散值，
-        同时确保值在参数的有效范围内。
+        Based on configured step sizes, round continuous parameters to the nearest discrete values,
+        while ensuring values are within valid parameter ranges.
         
         Args:
-            params: 连续参数值列表
+            params: List of continuous parameter values
             
         Returns:
-            discrete_params: 离散化后的参数值列表
+            discrete_params: List of discretized parameter values
         """
         from config import parameter_step_sizes, parameter_names
         discrete_params = []
@@ -124,63 +111,63 @@ class BayesianOptimizer:
             param_name = parameter_names[i]
             if param_name in parameter_step_sizes:
                 step_size = parameter_step_sizes[param_name]
-                # 将参数值四舍五入到最接近的步长倍数
+                # Round parameter value to nearest step multiple
                 rounded_value = round(param_value / step_size) * step_size
                 
-                # 确保值在允许范围内
+                # Ensure value is within allowed range
                 dimension_low = self.optimizer.space.dimensions[i].low
                 dimension_high = self.optimizer.space.dimensions[i].high
                 rounded_value = max(dimension_low, min(dimension_high, rounded_value))
                 
-                # 再次确保值确实是步长的整数倍
+                # Ensure value is exactly a multiple of step
                 rounded_value = round(rounded_value / step_size) * step_size
                 
                 discrete_params.append(rounded_value)
             else:
-                # 如果没有指定步长，则保留原始值
+                # If no step specified, keep original value
                 discrete_params.append(param_value)
         
         return discrete_params
     
     def tell(self, params, score):
-        """反馈评分给优化器
+        """Feedback score to optimizer
         
         Args:
-            params: 评估的参数值
-            score: 对应的评分（越高越好）
+            params: Evaluated parameter values
+            score: Corresponding score (higher is better)
         """
-        # 由于skopt默认最小化目标函数，因此使用负分
+        # Since skopt minimizes the objective function by default, use negative score
         self.optimizer.tell(params, -score)
     
     def get_gp_model(self):
-        """获取训练好的高斯过程模型
+        """Get trained Gaussian Process model
         
         Returns:
-            gp_model: 训练好的高斯过程回归模型
+            gp_model: Trained Gaussian Process regression model
         """
         return self.optimizer.base_estimator_
     
     @property
     def base_estimator_(self):
-        """获取基础估计器
+        """Get base estimator
         
         Returns:
-            base_estimator: 优化器的基础估计器
+            base_estimator: Optimizer's base estimator
         """
         return self.optimizer.base_estimator_
 
 
 class StoppingCriteria:
-    """优化停止条件管理
+    """Optimization stopping criteria management
     
-    实现多种停止条件，包括最大迭代次数、连续无改进次数、
-    达到目标评分和收敛性检查等。
+    Implements multiple stopping criteria, including maximum iterations, consecutive no-improvement count,
+    reaching target score, and convergence check, etc.
     """
     
     def __init__(self):
-        """初始化停止条件
+        """Initialize stopping criteria
         
-        从配置中加载停止条件参数。
+        Load stopping criteria parameters from configuration.
         """
         config = stopping_criteria_config
         self.max_iterations = config['max_iterations']
@@ -189,7 +176,7 @@ class StoppingCriteria:
         self.convergence_threshold = config['convergence_threshold']
         self.patience = config['patience']
         
-        # 初始化状态变量
+        # Initialize state variables
         self.iteration = 0
         self.best_score = -np.inf
         self.best_params = None
@@ -197,20 +184,20 @@ class StoppingCriteria:
         self.recent_scores = []
     
     def update(self, current_score, current_params):
-        """更新停止条件状态
+        """Update stopping criteria state
         
         Args:
-            current_score: 当前评估的评分
-            current_params: 当前评估的参数
+            current_score: Currently evaluated score
+            current_params: Currently evaluated parameters
         """
         self.iteration += 1
         self.recent_scores.append(current_score)
         
-        # 保持最近的评分记录
+        # Keep recent score records
         if len(self.recent_scores) > self.patience:
             self.recent_scores.pop(0)
         
-        # 更新最佳评分和参数
+        # Update best score and parameters
         if current_score > self.best_score:
             self.best_score = current_score
             self.best_params = current_params.copy() if hasattr(current_params, 'copy') else current_params
@@ -219,35 +206,35 @@ class StoppingCriteria:
             self.no_improvement_count += 1
     
     def should_stop(self):
-        """判断是否应该停止优化
+        """Determine whether optimization should stop
         
         Returns:
-            stop: 是否停止优化
-            reasons: 停止的原因列表
+            stop: Whether to stop optimization
+            reasons: List of stop reasons
         """
         reasons = []
         
         if self.iteration >= self.max_iterations:
-            reasons.append(f"✓ 达到最大迭代次数 ({self.iteration}/{self.max_iterations})")
+            reasons.append(f"✓ Reached maximum iterations ({self.iteration}/{self.max_iterations})")
         
         if self.no_improvement_count >= self.max_no_improvement:
-            reasons.append(f"✓ 连续 {self.no_improvement_count} 轮无改进")
+            reasons.append(f"✓ Consecutive {self.no_improvement_count} rounds without improvement")
         
         if self.best_score >= self.target_score:
-            reasons.append(f"✓ 达到目标评分 ({self.best_score:.4f} >= {self.target_score:.4f})")
+            reasons.append(f"✓ Reached target score ({self.best_score:.4f} >= {self.target_score:.4f})")
         
         if len(self.recent_scores) >= self.patience:
             score_variance = np.var(self.recent_scores)
             if score_variance < self.convergence_threshold ** 2:
-                reasons.append(f"✓ 优化收敛 (方差: {score_variance:.6f})")
+                reasons.append(f"✓ Optimization converged (variance: {score_variance:.6f})")
         
         return len(reasons) > 0, reasons
     
     def get_status(self):
-        """获取优化状态
+        """Get optimization status
         
         Returns:
-            status: 包含优化状态信息的字典
+            status: Dictionary containing optimization status information
         """
         return {
             'iteration': self.iteration,
@@ -257,7 +244,7 @@ class StoppingCriteria:
         }
     
     def reset(self):
-        """重置停止条件状态"""
+        """Reset stopping criteria state"""
         self.iteration = 0
         self.best_score = -np.inf
         self.best_params = None
@@ -266,17 +253,17 @@ class StoppingCriteria:
 
 
 class MultiFidelityOptimizer:
-    """多保真度贝叶斯优化器
+    """Multi-fidelity Bayesian optimizer
     
-    实现多保真度优化策略，通过平衡低保真度（快速）和高保真度（准确）
-    评估，提高优化效率。
+    Implements multi-fidelity optimization strategy, by balancing low-fidelity (fast) and high-fidelity (accurate)
+    evaluations, to improve optimization efficiency.
     """
     
     def __init__(self, dimensions):
-        """初始化多保真度优化器
+        """Initialize multi-fidelity optimizer
         
         Args:
-            dimensions: 参数搜索空间
+            dimensions: Parameter search space
         """
         from config import multi_fidelity_optimization_config
         self.config = multi_fidelity_optimization_config
@@ -293,20 +280,20 @@ class MultiFidelityOptimizer:
         self.last_suggested_fidelity = 'low'
     
     def ask(self):
-        """生成候选参数点
+        """Generate candidate parameter points
         
-        根据当前优化状态，决定使用低保真度还是高保真度评估。
+        Based on current optimization state, decide whether to use low-fidelity or high-fidelity evaluation.
         
         Returns:
-            params: 候选参数点
+            params: Candidate parameter points
         """
         from config import multi_fidelity_optimization_config
         
-        # 初期仅使用低保真度，加速探索
+        # Use only low-fidelity initially to accelerate exploration
         if len(self.low_fidelity_samples) < multi_fidelity_optimization_config['initial_low_fidelity_iterations']:
             self.last_suggested_fidelity = 'low'
         else:
-            # 基于成本比随机选择保真度
+            # Randomly select fidelity based on cost ratio
             cost_ratio = multi_fidelity_optimization_config['cost_low_fidelity'] / multi_fidelity_optimization_config['cost_high_fidelity']
             if np.random.rand() < cost_ratio:
                 self.last_suggested_fidelity = 'high'
@@ -316,36 +303,36 @@ class MultiFidelityOptimizer:
         return self.optimizer.ask()
     
     def tell(self, params, score, fidelity='low'):
-        """反馈评分给优化器
+        """Feedback score to optimizer
         
         Args:
-            params: 评估的参数值
-            score: 对应的评分
-            fidelity: 评估的保真度级别 ('low' 或 'high')
+            params: Evaluated parameter values
+            score: Corresponding score
+            fidelity: Evaluation fidelity level ('low' or 'high')
         """
-        # 存储样本
+        # Store samples
         if fidelity == 'low':
             self.low_fidelity_samples.append((params, score))
         else:
             self.high_fidelity_samples.append((params, score))
         
-        # 始终以负分反馈给优化器（因为默认最小化）
+        # Always feedback negative score to optimizer (since it defaults to minimization)
         self.optimizer.tell(params, -score)
     
     @property
     def base_estimator_(self):
-        """获取基础估计器
+        """Get base estimator
         
         Returns:
-            base_estimator: 优化器的基础估计器
+            base_estimator: Optimizer's base estimator
         """
         return self.optimizer.base_estimator_
     
     @property
     def high_fidelity_repeat(self):
-        """获取高保真度评估的重复次数
+        """Get high-fidelity evaluation repeat count
         
         Returns:
-            repeat_count: 高保真度评估的重复次数
+            repeat_count: High-fidelity evaluation repeat count
         """
         return self.config['high_fidelity_repeat']

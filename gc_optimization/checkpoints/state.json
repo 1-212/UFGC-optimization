@@ -1,8 +1,8 @@
 {
-  "current_round": 35,
-  "initial_points_used": 10,
+  "current_round": 0,
+  "initial_points_used": 0,
   "has_pending_params": false,
-  "optimization_stopped": true,
-  "stop_reason": "✓ 达到最大迭代次数 (35/35)",
-  "timestamp": "2026-04-08T15:14:37.095234"
+  "optimization_stopped": false,
+  "stop_reason": null,
+  "timestamp": "2026-04-08T16:30:06.496458"
 }

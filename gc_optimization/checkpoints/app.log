@@ -686,3 +686,61 @@
 2026-04-08 15:12:13,853 - gc_optimization - INFO - 停止条件已重建
 2026-04-08 15:12:13,868 - gc_optimization - INFO - 历史恢复完成
 2026-04-08 15:12:13,901 - gc_optimization - INFO - 应用已启动（增强版）
+2026-04-08 16:09:56,536 - gc_optimization - INFO - ==================================================
+2026-04-08 16:09:56,536 - gc_optimization - INFO - GC temperature program optimization system started
+2026-04-08 16:09:56,536 - gc_optimization - INFO - System initializing...
+2026-04-08 16:09:56,536 - gc_optimization - INFO - ==================================================
+2026-04-08 16:09:58,033 - gc_optimization - INFO - 历史已加载: 35 轮, 初始点已用: 10
+2026-04-08 16:09:58,033 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-04-08 16:10:15,448 - gc_optimization - INFO - 贝叶斯优化器已基于历史样本重建
+2026-04-08 16:10:15,449 - gc_optimization - INFO - 停止条件已重建
+2026-04-08 16:10:15,484 - gc_optimization - INFO - 历史恢复完成
+2026-04-08 16:10:15,527 - gc_optimization - INFO - 应用已启动（增强版）
+2026-04-08 16:12:18,023 - gc_optimization - INFO - ==================================================
+2026-04-08 16:12:18,023 - gc_optimization - INFO - GC temperature program optimization system started
+2026-04-08 16:12:18,023 - gc_optimization - INFO - System initializing...
+2026-04-08 16:12:18,023 - gc_optimization - INFO - ==================================================
+2026-04-08 16:12:18,921 - gc_optimization - INFO - 历史已加载: 35 轮, 初始点已用: 10
+2026-04-08 16:12:18,921 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-04-08 16:12:36,918 - gc_optimization - INFO - 贝叶斯优化器已基于历史样本重建
+2026-04-08 16:12:36,918 - gc_optimization - INFO - 停止条件已重建
+2026-04-08 16:12:36,929 - gc_optimization - INFO - 历史恢复完成
+2026-04-08 16:12:36,963 - gc_optimization - INFO - 应用已启动（增强版）
+2026-04-08 16:12:46,059 - gc_optimization - INFO - ==================================================
+2026-04-08 16:12:46,059 - gc_optimization - INFO - GC temperature program optimization system started
+2026-04-08 16:12:46,059 - gc_optimization - INFO - System initializing...
+2026-04-08 16:12:46,059 - gc_optimization - INFO - ==================================================
+2026-04-08 16:12:46,972 - gc_optimization - INFO - 历史已加载: 35 轮, 初始点已用: 10
+2026-04-08 16:12:46,972 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-04-08 16:13:05,089 - gc_optimization - INFO - 贝叶斯优化器已基于历史样本重建
+2026-04-08 16:13:05,090 - gc_optimization - INFO - 停止条件已重建
+2026-04-08 16:13:05,101 - gc_optimization - INFO - 历史恢复完成
+2026-04-08 16:13:05,136 - gc_optimization - INFO - 应用已启动（增强版）
+2026-04-08 16:28:50,692 - gc_optimization - INFO - ==================================================
+2026-04-08 16:28:50,692 - gc_optimization - INFO - GC temperature program optimization system started
+2026-04-08 16:28:50,692 - gc_optimization - INFO - System initializing...
+2026-04-08 16:28:50,694 - gc_optimization - INFO - ==================================================
+2026-04-08 16:28:51,590 - gc_optimization - INFO - 历史已加载: 35 轮, 初始点已用: 10
+2026-04-08 16:28:51,590 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-04-08 16:29:13,351 - gc_optimization - INFO - 贝叶斯优化器已基于历史样本重建
+2026-04-08 16:29:13,352 - gc_optimization - INFO - 停止条件已重建
+2026-04-08 16:29:13,365 - gc_optimization - INFO - 历史恢复完成
+2026-04-08 16:29:13,390 - gc_optimization - INFO - 应用已启动（增强版）
+2026-04-08 16:29:27,893 - gc_optimization - INFO - ==================================================
+2026-04-08 16:29:27,893 - gc_optimization - INFO - GC temperature program optimization system started
+2026-04-08 16:29:27,893 - gc_optimization - INFO - System initializing...
+2026-04-08 16:29:27,893 - gc_optimization - INFO - ==================================================
+2026-04-08 16:29:28,664 - gc_optimization - INFO - 历史已加载: 35 轮, 初始点已用: 10
+2026-04-08 16:29:28,664 - gc_optimization - INFO - 正在恢复优化器与停止条件...
+2026-04-08 16:29:47,388 - gc_optimization - INFO - 贝叶斯优化器已基于历史样本重建
+2026-04-08 16:29:47,388 - gc_optimization - INFO - 停止条件已重建
+2026-04-08 16:29:47,400 - gc_optimization - INFO - 历史恢复完成
+2026-04-08 16:29:47,426 - gc_optimization - INFO - 应用已启动（增强版）
+2026-04-08 16:30:06,486 - gc_optimization - INFO - ✓ 旧数据已备份: gc_optimization\results\备份_20260408_163006.csv
+2026-04-08 16:30:06,562 - gc_optimization - INFO - ✓ 已重置所有数据
+2026-04-08 16:53:03,205 - gc_optimization - INFO - ==================================================
+2026-04-08 16:53:03,206 - gc_optimization - INFO - GC temperature program optimization system started
+2026-04-08 16:53:03,206 - gc_optimization - INFO - System initializing...
+2026-04-08 16:53:03,206 - gc_optimization - INFO - ==================================================
+2026-04-08 16:53:04,583 - gc_optimization - INFO - History loaded: 0 rounds, initial points used: 0
+2026-04-08 16:53:04,586 - gc_optimization - INFO - GC temperature program optimization system started (enhanced version)

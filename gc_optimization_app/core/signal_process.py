@@ -1,18 +1,5 @@
-"""GC信号处理模块
+"""Signal processing module for GC temperature program optimization system"""
 
-本模块实现了气相色谱(GC)信号的处理功能，包括基线校正、峰值检测、
-分离度计算和综合评分等核心算法。基于现代信号处理技术，
-实现了高效、准确的色谱信号分析。
-
-核心功能：
-1. ALS基线校正：使用非对称最小二乘算法进行基线校正
-2. CWT峰值检测：使用连续小波变换进行多尺度峰值检测
-3. 分离度计算：基于半峰宽和保留时间计算色谱峰分离度
-4. ECRF评分：计算增强型色谱分辨率因子，评估分离效果
-
-作者: 研究团队
-日期: 2026年
-"""
 
 import numpy as np
 import pywt
@@ -22,55 +9,55 @@ from scipy.sparse.linalg import spsolve
 from config import signal_processing_config
 
 def perform_als_baseline_correction(signal, lambda_value=1e5, asymmetry_parameter=0.01, max_iterations=10):
-    """使用非对称最小二乘(ALS)算法进行基线校正
+    """Perform baseline correction using Asymmetric Least Squares (ALS) algorithm
     
-    基于Eilers和Boelens (2005)的算法，通过迭代优化基线估计，
-    适用于色谱信号的基线校正。
+    Based on the algorithm by Eilers and Boelens (2005), iteratively optimizes baseline estimation,
+    suitable for chromatographic signal baseline correction.
     
     Args:
-        signal: 输入信号
-        lambda_value: 平滑参数，控制基线平滑度
-        asymmetry_parameter: 非对称参数，控制基线对信号的跟随程度
-        max_iterations: 最大迭代次数
+        signal: Input signal
+        lambda_value: Smoothing parameter, controls baseline smoothness
+        asymmetry_parameter: Asymmetry parameter, controls how closely baseline follows signal
+        max_iterations: Maximum number of iterations
         
     Returns:
-        baseline: 估计的基线
+        baseline: Estimated baseline
     """
     signal_length = len(signal)
-    # 创建二阶差分矩阵（用于平滑约束）
+    # Create second-order difference matrix (for smoothing constraint)
     difference_matrix = sparse.diags([1, -2, 1], [0, -1, -2], shape=(signal_length, signal_length-2))
     weights = np.ones(signal_length)
     
     for _ in range(max_iterations):
-        # 创建权重矩阵
+        # Create weight matrix
         weight_matrix = sparse.spdiags(weights, 0, signal_length, signal_length)
-        # 构建系统矩阵
+        # Build system matrix
         system_matrix = weight_matrix + lambda_value * difference_matrix.dot(difference_matrix.transpose())
-        # 求解线性系统
+        # Solve linear system
         baseline = spsolve(system_matrix, weights * signal)
-        # 更新权重
+        # Update weights
         previous_weights = weights.copy()
         weights = asymmetry_parameter * (signal > baseline) + (1 - asymmetry_parameter) * (signal < baseline)
-        # 检查收敛
+        # Check convergence
         if np.linalg.norm(weights - previous_weights) < 1e-6:
             break
     return baseline
 
 def preprocess_chromatogram_data(dataframe, savitzky_golay_window=None, savitzky_golay_polynomial=None, 
                                als_lambda=None, als_asymmetry=None):
-    """预处理色谱数据
+    """Preprocess chromatogram data
     
-    对色谱数据进行平滑和基线校正处理，提高后续分析的准确性。
+    Apply smoothing and baseline correction to chromatographic data to improve accuracy of subsequent analysis.
     
     Args:
-        dataframe: 包含色谱数据的DataFrame
-        savitzky_golay_window: Savitzky-Golay平滑窗口大小
-        savitzky_golay_polynomial: Savitzky-Golay多项式阶数
-        als_lambda: ALS基线校正的平滑参数
-        als_asymmetry: ALS基线校正的非对称参数
+        dataframe: DataFrame containing chromatographic data
+        savitzky_golay_window: Savitzky-Golay smoothing window size
+        savitzky_golay_polynomial: Savitzky-Golay polynomial order
+        als_lambda: ALS baseline correction smoothing parameter
+        als_asymmetry: ALS baseline correction asymmetry parameter
         
     Returns:
-        processed_dataframe: 处理后的DataFrame
+        processed_dataframe: Processed DataFrame
     """
     if savitzky_golay_window is None:
         savitzky_golay_window = signal_processing_config['savitzky_golay_window']
@@ -82,17 +69,17 @@ def preprocess_chromatogram_data(dataframe, savitzky_golay_window=None, savitzky
         als_asymmetry = signal_processing_config['als_p']
     
     processed_dataframe = dataframe.copy()
-    # 获取信号列（假设第一列是时间或索引）
+    # Get signal columns (assuming first column is time or index)
     signal_columns = processed_dataframe.columns[1:]
     signal_data = processed_dataframe[signal_columns].values
     
-    # 确保窗口大小为奇数
+    # Ensure window size is odd
     window_size = savitzky_golay_window + (savitzky_golay_window % 2 == 0)
     
-    # 应用Savitzky-Golay平滑
+    # Apply Savitzky-Golay smoothing
     smoothed_data = savgol_filter(signal_data, window_size, savitzky_golay_polynomial, axis=0)
     
-    # 应用ALS基线校正
+    # Apply ALS baseline correction
     baseline_corrected_data = smoothed_data - np.apply_along_axis(
         perform_als_baseline_correction, 0, smoothed_data, als_lambda, als_asymmetry
     )
@@ -101,19 +88,19 @@ def preprocess_chromatogram_data(dataframe, savitzky_golay_window=None, savitzky
     return processed_dataframe
 
 def detect_peaks_using_cwt(signal, minimum_signal_noise_ratio=None, noise_percentage=None, wavelet_widths=None):
-    """使用连续小波变换(CWT)检测色谱峰
+    """Detect chromatographic peaks using Continuous Wavelet Transform (CWT)
     
-    基于多尺度小波分析，实现对不同宽度色谱峰的有效检测。
+    Based on multi-scale wavelet analysis, effectively detects chromatographic peaks of different widths.
     
     Args:
-        signal: 输入信号
-        minimum_signal_noise_ratio: 最小信噪比阈值
-        noise_percentage: 噪声水平百分比
-        wavelet_widths: 小波尺度宽度范围
+        signal: Input signal
+        minimum_signal_noise_ratio: Minimum signal-to-noise ratio threshold
+        noise_percentage: Noise level percentage
+        wavelet_widths: Wavelet scale width range
         
     Returns:
-        detected_peaks: 检测到的峰位置索引
-        cwt_matrix: 连续小波变换矩阵
+        detected_peaks: Detected peak position indices
+        cwt_matrix: Continuous wavelet transform matrix
     """
     if minimum_signal_noise_ratio is None:
         minimum_signal_noise_ratio = signal_processing_config['cwt_min_signal_noise_ratio']
@@ -126,22 +113,22 @@ def detect_peaks_using_cwt(signal, minimum_signal_noise_ratio=None, noise_percen
         max_width = min(50, signal_length // 20)
         wavelet_widths = np.arange(min_width, max_width + 1)
     
-    # 执行连续小波变换
+    # Perform continuous wavelet transform
     cwt_matrix = pywt.cwt(signal, wavelet_widths, 'mexh')[0]
     peak_candidates = []
     
-    # 在每个尺度上检测峰
+    # Detect peaks at each scale
     for scale_index, width in enumerate(wavelet_widths):
         scale_signal = cwt_matrix[scale_index, :]
-        # 估计噪声水平
+        # Estimate noise level
         noise_level = np.percentile(np.abs(scale_signal), noise_percentage)
-        # 计算阈值
+        # Calculate threshold
         threshold = minimum_signal_noise_ratio * noise_level
-        # 检测峰
+        # Detect peaks
         peaks, _ = find_peaks(scale_signal, height=threshold, 
                               distance=max(1, width//2))
         
-        # 记录峰候选
+        # Record peak candidates
         for peak in peaks:
             peak_candidates.append({
                 'position': peak,
@@ -153,29 +140,29 @@ def detect_peaks_using_cwt(signal, minimum_signal_noise_ratio=None, noise_percen
     if not peak_candidates:
         return np.array([]), cwt_matrix
     
-    # 按位置排序峰候选
+    # Sort peak candidates by position
     peak_candidates.sort(key=lambda x: x['position'])
     merged_peaks = []
     current_group = [peak_candidates[0]]
-    # 计算合并距离
+    # Calculate merge distance
     merge_distance = max(3, np.mean(wavelet_widths))
     
-    # 合并相邻的峰候选
+    # Merge adjacent peak candidates
     for candidate in peak_candidates[1:]:
         if candidate['position'] - current_group[-1]['position'] <= merge_distance:
             current_group.append(candidate)
         else:
-            # 选择组内强度最大的峰
+            # Select peak with maximum intensity in group
             best_peak = max(current_group, key=lambda x: x['intensity'])
             merged_peaks.append(best_peak['position'])
             current_group = [candidate]
     
-    # 处理最后一组
+    # Process last group
     if current_group:
         best_peak = max(current_group, key=lambda x: x['intensity'])
         merged_peaks.append(best_peak['position'])
     
-    # 验证峰位置
+    # Validate peak positions
     validated_peaks = []
     for peak_position in merged_peaks:
         start_index = max(0, peak_position - 2)
@@ -191,19 +178,19 @@ def detect_peaks_using_cwt(signal, minimum_signal_noise_ratio=None, noise_percen
     return np.array(sorted(set(validated_peaks))), cwt_matrix
 
 def detect_peak_regions_using_cwt(signal, minimum_signal_noise_ratio=None, noise_percentage=None, merge_distance=None):
-    """检测色谱峰区域
+    """Detect chromatographic peak regions
     
-    基于CWT峰检测结果，识别峰区域并进行合并。
+    Based on CWT peak detection results, identify and merge peak regions.
     
     Args:
-        signal: 输入信号
-        minimum_signal_noise_ratio: 最小信噪比阈值
-        noise_percentage: 噪声水平百分比
-        merge_distance: 峰区域合并距离
+        signal: Input signal
+        minimum_signal_noise_ratio: Minimum signal-to-noise ratio threshold
+        noise_percentage: Noise level percentage
+        merge_distance: Peak region merge distance
         
     Returns:
-        peak_regions: 峰区域列表，每个区域包含起始索引、结束索引和峰位置
-        cwt_matrix: 连续小波变换矩阵
+        peak_regions: List of peak regions, each containing start index, end index, and peak positions
+        cwt_matrix: Continuous wavelet transform matrix
     """
     if minimum_signal_noise_ratio is None:
         minimum_signal_noise_ratio = signal_processing_config['cwt_min_signal_noise_ratio']
@@ -212,14 +199,14 @@ def detect_peak_regions_using_cwt(signal, minimum_signal_noise_ratio=None, noise
     if merge_distance is None:
         merge_distance = signal_processing_config['peak_merge_distance']
     
-    # 检测峰位置
+    # Detect peak positions
     peak_indices, cwt_matrix = detect_peaks_using_cwt(signal, minimum_signal_noise_ratio, noise_percentage)
     
     if len(peak_indices) == 0:
         return [], cwt_matrix
     
     def estimate_peak_width(signal, peak_index):
-        """估计峰的半峰宽"""
+        """Estimate peak full width at half maximum"""
         peak_height = signal[peak_index]
         half_height = peak_height / 2
         left_index = peak_index
@@ -230,7 +217,7 @@ def detect_peak_regions_using_cwt(signal, minimum_signal_noise_ratio=None, noise
             right_index += 1
         return max(5, right_index - left_index)
     
-    # 初始化峰区域
+    # Initialize peak regions
     initial_regions = []
     for peak_index in peak_indices:
         peak_width = estimate_peak_width(signal, peak_index)
@@ -242,46 +229,46 @@ def detect_peak_regions_using_cwt(signal, minimum_signal_noise_ratio=None, noise
     if len(initial_regions) <= 1:
         return initial_regions, cwt_matrix
     
-    # 合并重叠的峰区域
+    # Merge overlapping peak regions
     merged_regions = []
     current_start, current_end, current_peaks = initial_regions[0]
     
     for start, end, peaks in initial_regions[1:]:
         if start <= current_end + merge_distance:
-            # 合并区域
+            # Merge regions
             current_end = max(current_end, end)
             current_peaks.extend(peaks)
         else:
-            # 保存当前区域并开始新区域
+            # Save current region and start new region
             merged_regions.append((current_start, current_end, sorted(current_peaks)))
             current_start, current_end, current_peaks = start, end, peaks
     
-    # 添加最后一个区域
+    # Add last region
     merged_regions.append((current_start, current_end, sorted(current_peaks)))
     return merged_regions, cwt_matrix
 
 def calculate_peak_resolution(signal, peak1_index, peak2_index):
-    """计算两个色谱峰之间的分离度
+    """Calculate resolution between two chromatographic peaks
     
-    基于半峰宽(FWHM)和保留时间差计算分离度，
-    采用行业标准公式：Rs = 1.18 * Δt / (W1 + W2)
+    Calculate resolution based on full width at half maximum (FWHM) and retention time difference,
+    using industry standard formula: Rs = 1.18 * Δt / (W1 + W2)
     
     Args:
-        signal: 输入信号
-        peak1_index: 第一个峰的索引
-        peak2_index: 第二个峰的索引
+        signal: Input signal
+        peak1_index: Index of first peak
+        peak2_index: Index of second peak
         
     Returns:
-        resolution: 分离度值
+        resolution: Resolution value
     """
-    # 确保峰1在峰2之前
+    # Ensure peak1 is before peak2
     if peak1_index > peak2_index:
         peak1_index, peak2_index = peak2_index, peak1_index
     
     def calculate_full_width_at_half_maximum(signal, peak_index):
-        """计算峰的半峰宽(FWHM)"""
+        """Calculate peak full width at half maximum (FWHM)"""
         if peak_index < 0 or peak_index >= len(signal):
-            return 10  # 默认值
+            return 10  # Default value
         peak_height = signal[peak_index]
         half_height = peak_height / 2
         left_index = peak_index
@@ -293,61 +280,61 @@ def calculate_peak_resolution(signal, peak1_index, peak2_index):
         fwhm = max(1, right_index - left_index)
         return fwhm
     
-    # 计算两个峰的半峰宽
+    # Calculate FWHM for both peaks
     fwhm1 = calculate_full_width_at_half_maximum(signal, peak1_index)
     fwhm2 = calculate_full_width_at_half_maximum(signal, peak2_index)
-    # 计算保留时间差
+    # Calculate retention time difference
     retention_time_difference = abs(peak2_index - peak1_index)
-    # 计算平均半峰宽
+    # Calculate average width
     average_width = (fwhm1 + fwhm2) / 2
     
     if average_width == 0:
         return 0
     
-    # 计算分离度
+    # Calculate resolution
     resolution = 1.18 * retention_time_difference / average_width
     return resolution
 
 def calculate_all_peak_resolutions(signal, peak_regions):
-    """计算所有相邻峰对的分离度
+    """Calculate resolutions for all adjacent peak pairs
     
-    分析所有相邻峰对的分离度，并评估分离状态。
+    Analyze resolutions for all adjacent peak pairs and evaluate separation status.
     
     Args:
-        signal: 输入信号
-        peak_regions: 峰区域列表
+        signal: Input signal
+        peak_regions: List of peak regions
         
     Returns:
-        resolution_data: 包含所有峰对分离度信息的列表
+        resolution_data: List containing resolution information for all peak pairs
     """
     resolution_data = []
     all_peaks = []
     
-    # 收集所有峰的位置
+    # Collect all peak positions
     for start_index, end_index, peak_indices in peak_regions:
         all_peaks.extend(peak_indices)
     
     if len(all_peaks) < 2:
         return resolution_data
     
-    # 按位置排序峰
+    # Sort peaks by position
     sorted_peaks = sorted(all_peaks)
     
-    # 计算相邻峰对的分离度
+    # Calculate resolution for adjacent peak pairs
     for i in range(len(sorted_peaks) - 1):
         peak1_index = sorted_peaks[i]
         peak2_index = sorted_peaks[i + 1]
         resolution = calculate_peak_resolution(signal, peak1_index, peak2_index)
         
-        # 评估分离状态
+        # Evaluate separation status
         if resolution >= 1.5:
-            separation_status = '基线分离'
+            separation_status = 'Baseline separation'
         elif resolution >= 1:
-            separation_status = '部分分离'
+            separation_status = 'Partial separation'
         else:
-            separation_status = '未分离'
+            separation_status = 'No separation'
         
-        # 确定峰所在的区域
+        # Determine regions where peaks are located
         peak1_region = None
         peak2_region = None
         
@@ -357,7 +344,7 @@ def calculate_all_peak_resolutions(signal, peak_regions):
             if peak2_index in peak_indices:
                 peak2_region = region_index
         
-        # 判断是否为跨区域峰对
+        # Determine if peaks are in different regions
         is_inter_region = peak1_region != peak2_region
         
         resolution_data.append({
@@ -374,25 +361,25 @@ def calculate_all_peak_resolutions(signal, peak_regions):
 
 def calculate_enhanced_chromatographic_resolution_factor(signal, peak_regions, resolution_requirement=None, 
                                                       separation_ratio_weight=None):
-    """计算增强型色谱分辨率因子(ECRF)
+    """Calculate Enhanced Chromatographic Resolution Factor (ECRF)
     
-    综合考虑分离度和分离比例，评估色谱分离效果。
+    Comprehensive evaluation of chromatographic separation performance considering resolution and separation ratio.
     
     Args:
-        signal: 输入信号
-        peak_regions: 峰区域列表
-        resolution_requirement: 要求的分离度阈值
-        separation_ratio_weight: 分离比例权重
+        signal: Input signal
+        peak_regions: List of peak regions
+        resolution_requirement: Required resolution threshold
+        separation_ratio_weight: Separation ratio weight
         
     Returns:
-        enhanced_crf: 增强型色谱分辨率因子
+        enhanced_crf: Enhanced chromatographic resolution factor
     """
     if resolution_requirement is None:
         resolution_requirement = signal_processing_config['crf_resolution_requirement']
     if separation_ratio_weight is None:
         separation_ratio_weight = signal_processing_config['crf_separation_weight']
     
-    # 计算所有峰对的分离度
+    # Calculate resolutions for all peak pairs
     all_resolutions_data = calculate_all_peak_resolutions(signal, peak_regions)
     all_resolutions = [res['resolution'] for res in all_resolutions_data]
     total_peaks = sum(len(peak_indices) for _, _, peak_indices in peak_regions)
@@ -400,7 +387,7 @@ def calculate_enhanced_chromatographic_resolution_factor(signal, peak_regions, r
     if len(all_resolutions) == 0 or total_peaks < 2:
         return 0.0
     
-    # 计算分辨率质量分数
+    # Calculate resolution quality score
     clipped_resolutions = [np.clip(res, 0, resolution_requirement) for res in all_resolutions]
     clipped_sum = sum(clipped_resolutions)
     max_possible_sum = resolution_requirement * (total_peaks - 1)
@@ -410,7 +397,7 @@ def calculate_enhanced_chromatographic_resolution_factor(signal, peak_regions, r
     else:
         resolution_quality_score = clipped_sum / max_possible_sum
     
-    # 计算基线分离比例奖励
+    # Calculate baseline separation ratio bonus
     baseline_separated_pairs = sum(1 for res in all_resolutions_data if res['resolution'] >= 1.5)
     total_pairs = len(all_resolutions_data)
     
@@ -425,7 +412,7 @@ def calculate_enhanced_chromatographic_resolution_factor(signal, peak_regions, r
             separation_factor = np.clip(separation_factor, 0.1, 2.0)
         separation_ratio_bonus = separation_factor * (total_pairs / 100)
     
-    # 计算增强型CRF
+    # Calculate enhanced CRF
     enhanced_crf = resolution_quality_score * separation_ratio_bonus
     return enhanced_crf
 
@@ -434,42 +421,42 @@ def calculate_ecrf_comprehensive(signal, peak_regions, analysis_time, current_it
                                reference_peak_count=1, resolution_requirement=1.5, 
                                minimum_analysis_time=80, maximum_analysis_time=300):
     """
-    计算综合ECRF指标，考虑分离效果和分析时间
+    Calculate comprehensive ECRF metric considering separation performance and analysis time
     
-    基于分离度、分离比例和分析时间，计算综合评分指标，
-    用于评估GC升温程序的整体性能。
+    Based on resolution, separation ratio, and analysis time, calculate comprehensive score metric
+    for evaluating overall performance of GC temperature programs.
     
     Args:
-    - signal: 色谱信号数据
-    - peak_regions: 峰区域列表
-    - analysis_time: 分析时间（秒）
-    - current_iteration: 当前迭代次数
-    - total_iterations: 总迭代次数
-    - reference_peak_count: 初始方法检测到的峰数量
-    - resolution_requirement: 要求的分离度阈值
-    - minimum_analysis_time: 最短允许分析时间
-    - maximum_analysis_time: 最长允许分析时间
+    - signal: Chromatographic signal data
+    - peak_regions: List of peak regions
+    - analysis_time: Analysis time (seconds)
+    - current_iteration: Current iteration count
+    - total_iterations: Total iteration count
+    - reference_peak_count: Number of peaks detected by initial method
+    - resolution_requirement: Required resolution threshold
+    - minimum_analysis_time: Minimum allowed analysis time
+    - maximum_analysis_time: Maximum allowed analysis time
     
     Returns:
-    - ecrf: 综合ECRF评分
+    - ecrf: Comprehensive ECRF score
     """
-    # 计算分离度相关数据
+    # Calculate resolution-related data
     all_resolutions_data = calculate_all_peak_resolutions(signal, peak_regions)
     all_resolutions = [res['resolution'] for res in all_resolutions_data]
-    observed_peak_count = sum(len(peak_indices) for _, _, peak_indices in peak_regions)  # 检测到的色谱峰总数
-    peak_pair_count = len(all_resolutions)  # 相邻峰对数量
+    observed_peak_count = sum(len(peak_indices) for _, _, peak_indices in peak_regions)  # Total number of detected chromatographic peaks
+    peak_pair_count = len(all_resolutions)  # Number of adjacent peak pairs
     
     if observed_peak_count < 2 or peak_pair_count == 0:
         return 0.0
     
-    # 计算分离效果因子 f_sep = S_res * B_sep
-    # S_res: 分辨率评分
+    # Calculate separation factor f_sep = S_res * B_sep
+    # S_res: Resolution score
     clipped_resolutions = [min(res, resolution_requirement) for res in all_resolutions]
     resolution_score = sum(clipped_resolutions) / (resolution_requirement * (observed_peak_count - 1))
     
-    # B_sep: 基线分离比例评分
-    baseline_separated_pairs = sum(1 for res in all_resolutions if res >= resolution_requirement)  # 基线分离的峰对数
-    total_pairs = peak_pair_count  # 总峰对数
+    # B_sep: Baseline separation ratio score
+    baseline_separated_pairs = sum(1 for res in all_resolutions if res >= resolution_requirement)  # Number of baseline-separated peak pairs
+    total_pairs = peak_pair_count  # Total number of peak pairs
     if total_pairs > 0 and reference_peak_count > 0:
         baseline_separation_score = (np.log(1 + baseline_separated_pairs / total_pairs) / np.log(2)) * (total_pairs / reference_peak_count)
     else:
@@ -477,16 +464,16 @@ def calculate_ecrf_comprehensive(signal, peak_regions, analysis_time, current_it
     
     separation_factor = resolution_score * baseline_separation_score
     
-    # 计算时间因子 f_time
+    # Calculate time factor f_time
     time_factor = 1 - (analysis_time - minimum_analysis_time) / (maximum_analysis_time - minimum_analysis_time)
-    # 限制时间因子在合理范围内 [0, 1]
+    # Limit time factor to reasonable range [0, 1]
     time_factor = np.clip(time_factor, 0.0, 1.0)
     
-    # 计算权重（随迭代次数调整）
-    separation_weight = 0.7 + 0.3 * (1 - current_iteration / total_iterations)  # 初期更重视分离效果
+    # Calculate weights (adjusted with iteration count)
+    separation_weight = 0.7 + 0.3 * (1 - current_iteration / total_iterations)  # More emphasis on separation in early iterations
     time_weight = 1 - separation_weight
     
-    # 计算综合ECRF
+    # Calculate comprehensive ECRF
     ecrf = separation_weight * separation_factor + time_weight * time_factor
     
     return ecrf

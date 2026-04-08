@@ -1,14 +1,14 @@
-"""UI面板模块"""
+"""UI panels module"""
 
 import tkinter as tk
 from tkinter import ttk
 from config import PARAM_NAMES, PARAM_UNITS
 
 class ParameterPanel:
-    """参数显示面板"""
+    """Parameter display panel"""
     
     def __init__(self, parent):
-        self.frame = ttk.LabelFrame(parent, text="📋 当前参数", padding=10)
+        self.frame = ttk.LabelFrame(parent, text="📋 Current Parameters", padding=10)
         
         scrollbar = ttk.Scrollbar(self.frame)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -25,10 +25,10 @@ class ParameterPanel:
         self.frame.pack(**kwargs)
     
     def display_params(self, params, param_info=None):
-        """显示参数"""
+        """Display parameters"""
         self.text.delete(1.0, tk.END)
         self.text.insert(tk.END, "="*50 + "\n")
-        self.text.insert(tk.END, "当前参数\n")
+        self.text.insert(tk.END, "Current Parameters\n")
         self.text.insert(tk.END, "="*50 + "\n\n")
         
         for i, (name, value) in enumerate(zip(PARAM_NAMES, params)):
@@ -40,14 +40,14 @@ class ParameterPanel:
 
 
 class ResultPanel:
-    """结果显示面板"""
+    """Result display panel"""
     
     def __init__(self, parent):
         self.notebook = ttk.Notebook(parent)
         
-        # 标签页1：优化记录
+        # Tab 1: Optimization Log
         self.log_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.log_frame, text="📝 优化记录")
+        self.notebook.add(self.log_frame, text="📝 Optimization Log")
         
         scrollbar = ttk.Scrollbar(self.log_frame)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -60,9 +60,9 @@ class ResultPanel:
         self.result_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.config(command=self.result_text.yview)
         
-        # 标签页2：统计信息
+        # Tab 2: Statistics
         self.stats_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.stats_frame, text="📈 统计信息")
+        self.notebook.add(self.stats_frame, text="📈 Statistics")
         
         self.stats_text = tk.Text(
             self.stats_frame, height=30, width=45, 

@@ -1,103 +1,96 @@
-"""GC实验数据管理模块
+"""GC experiment data management module"""
 
-本模块实现了实验数据的管理功能，包括数据存储、检索和分析。
-用于跟踪和管理GC升温参数优化过程中的实验数据，
-提供数据访问和查询功能。
-
-作者: 研究团队
-日期: 2026年
-"""
 
 class ExperimentDataManager:
-    """GC实验数据管理器
+    """GC experiment data manager
     
-    负责管理和组织GC升温参数优化过程中的实验数据，
-    提供数据存储、检索和分析功能。
+    Responsible for managing and organizing experimental data during GC temperature program optimization,
+    providing data storage, retrieval, and analysis functionality.
     """
     
     def __init__(self, max_in_memory=100):
-        """初始化数据管理器
+        """Initialize data manager
         
         Args:
-            max_in_memory: 内存中存储的最大实验数据量
+            max_in_memory: Maximum number of experiment data to store in memory
         """
         self.experiment_data = []
         self.max_in_memory = max_in_memory
     
     def add_experiment(self, experiment):
-        """添加实验数据
+        """Add experiment data
         
         Args:
-            experiment: 实验数据字典
+            experiment: Experiment data dictionary
         """
         self.experiment_data.append(experiment)
     
     def get_all_experiments(self):
-        """获取所有实验数据
+        """Get all experiment data
         
         Returns:
-            list: 实验数据列表的副本
+            list: Copy of experiment data list
         """
         return self.experiment_data.copy()
     
     def get_all(self):
-        """获取所有实验数据（兼容旧接口）
+        """Get all experiment data (compatible with old interface)
         
         Returns:
-            list: 实验数据列表的副本
+            list: Copy of experiment data list
         """
         return self.get_all_experiments()
     
     def __len__(self):
-        """返回实验数据总量
+        """Return total experiment data count
         
         Returns:
-            int: 实验数据数量
+            int: Number of experiment data
         """
         return len(self.experiment_data)
     
     def __getitem__(self, index):
-        """按索引访问实验数据
+        """Access experiment data by index
         
         Args:
-            index: 实验数据索引
+            index: Experiment data index
             
         Returns:
-            dict: 实验数据字典
+            dict: Experiment data dictionary
         """
         return self.experiment_data[index]
     
     def __iter__(self):
-        """实验数据迭代器
+        """Experiment data iterator
         
         Returns:
-            iterator: 实验数据迭代器
+            iterator: Experiment data iterator
         """
         return iter(self.experiment_data)
     
     def clear_data(self):
-        """清空所有实验数据"""
+        """Clear all experiment data"""
         self.experiment_data = []
     
     def get_latest_experiments(self, count=5):
-        """获取最近的实验数据
+        """Get latest experiment data
         
         Args:
-            count: 要获取的实验数据数量
+            count: Number of experiment data to retrieve
             
         Returns:
-            list: 最近的实验数据列表
+            list: List of latest experiment data
         """
         return self.experiment_data[-count:] if len(self.experiment_data) > 0 else []
     
     def get_experiment_by_round(self, round_number):
-        """按轮次获取实验数据
+        """Get experiment data by round
         
         Args:
-            round_number: 实验轮次
+            round_number: Experiment round number
             
         Returns:
-            dict: 对应轮次的实验数据，若不存在则返回None
+            dict: Experiment data for the specified round, None if not found
         """
         for experiment in self.experiment_data:
             if experiment['round'] == round_number:
@@ -105,10 +98,10 @@ class ExperimentDataManager:
         return None
     
     def get_best_experiment(self):
-        """获取最佳实验数据
+        """Get best experiment data
         
         Returns:
-            dict: 评分最高的实验数据，若没有数据则返回None
+            dict: Experiment data with highest score, None if no data
         """
         if not self.experiment_data:
             return None

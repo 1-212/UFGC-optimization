@@ -41,7 +41,7 @@ print(f"Optimization stopped: {app.optimization_stopped}, stop_reason: {app.stop
 app.save_history()
 print("Checkpoint saved")
 
-# 验证从检查点恢复
+# Verify recovery from checkpoint
 root2 = tk.Tk()
 root2.withdraw()
 app2 = BayesianOptimizationUI(root2)

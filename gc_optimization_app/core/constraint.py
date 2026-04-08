@@ -1,18 +1,5 @@
-"""GC升温参数约束处理模块
+"""Constraint handling module for GC temperature program optimization system"""
 
-本模块实现了GC升温参数的约束处理功能，包括可行性检查、
-分析时间计算、参数投影到可行域以及可行点生成等功能。
-基于色谱理论和实验要求，确保生成的参数满足物理和操作约束。
-
-核心功能：
-1. 分析时间计算：根据升温程序参数计算总分析时间
-2. 可行性检查：验证参数是否满足温度和时间约束
-3. 可行域投影：将不可行参数调整为可行参数
-4. 可行点生成：生成满足约束的随机或启发式参数点
-
-作者: 研究团队
-日期: 2026年
-"""
 
 import numpy as np
 from config import (
@@ -24,39 +11,41 @@ from config import (
 )
 
 class ConstraintHandler:
-    """GC升温参数约束处理器
+    """GC temperature program constraint handler
     
-    负责处理GC升温参数的约束条件，确保参数满足物理和操作要求。
+    Responsible for handling constraint conditions for GC temperature program parameters,
+    ensuring parameters meet physical and operational requirements.
     """
     
     def __init__(self):
-        """初始化约束处理器"""
+        """Initialize constraint handler"""
         self.max_analysis_time = max_analysis_time
         self.min_analysis_time = min_analysis_time
     
     def calculate_analysis_time(self, parameters):
-        """计算分析时间
+        """Calculate analysis time
         
-        根据升温程序参数计算总分析时间，包括初始保持、升温阶段和后续保持时间。
+        Calculate total analysis time based on temperature program parameters,
+        including initial hold, ramp phases, and subsequent hold times.
         
         Args:
-            parameters: 升温程序参数列表
+            parameters: Temperature program parameter list
             
         Returns:
-            analysis_time: 总分析时间（秒）
+            analysis_time: Total analysis time (seconds)
         """
-        # 确保参数是标量值，处理numpy数组情况
+        # Ensure parameters are scalar values, handle numpy array cases
         parameter_values = []
         for param in parameters:
-            # 检查是否为numpy数组或其他序列类型
+            # Check if param is a numpy array or other sequence type
             if hasattr(param, '__len__') and hasattr(param, '__getitem__'):
-                # 如果是长度为1的数组，提取元素；否则取第一个元素
-                if hasattr(param, 'item'):  # numpy标量有.item()方法
+                # If it's a length-1 array, extract element; otherwise take first element
+                if hasattr(param, 'item'):  # numpy scalars have .item() method
                     scalar_value = param.item()
                 elif len(param) == 1:
                     scalar_value = param[0]
                 else:
-                    scalar_value = param[0]  # 取第一个元素
+                    scalar_value = param[0]  # Take first element
             else:
                 scalar_value = float(param)
             parameter_values.append(scalar_value)
@@ -64,47 +53,47 @@ class ConstraintHandler:
         initial_temperature, initial_hold_time, ramp_rate_1, target_temperature_1, \
         hold_time_1, ramp_rate_2, target_temperature_2, hold_time_2 = parameter_values
         
-        # 检查升温速率是否为正
+        # Check if ramp rates are positive
         if ramp_rate_1 <= 0 or ramp_rate_2 <= 0:
             return float('inf')
         
-        # 计算各阶段时间
+        # Calculate time for each phase
         initial_hold = initial_hold_time
         ramp1_time = (target_temperature_1 - initial_temperature) / ramp_rate_1
         hold1_time = hold_time_1
         ramp2_time = (target_temperature_2 - target_temperature_1) / ramp_rate_2
         hold2_time = hold_time_2
         
-        # 计算总分析时间
+        # Calculate total analysis time
         total_time = (initial_hold + ramp1_time + hold1_time + 
                       ramp2_time + hold2_time)
         
         return total_time
     
     def is_feasible(self, parameters):
-        """检查参数可行性
+        """Check parameter feasibility
         
-        验证参数是否满足温度和时间约束条件。
+        Verify whether parameters meet temperature and time constraints.
         
         Args:
-            parameters: 升温程序参数列表
+            parameters: Temperature program parameter list
             
         Returns:
-            feasible: 是否可行
-            message: 可行性检查结果消息
+            feasible: Whether feasible
+            message: Feasibility check result message
         """
-        # 确保参数是标量值，处理numpy数组情况
+        # Ensure parameters are scalar values, handle numpy array cases
         parameter_values = []
         for param in parameters:
-            # 检查是否为numpy数组或其他序列类型
+            # Check if param is a numpy array or other sequence type
             if hasattr(param, '__len__') and hasattr(param, '__getitem__'):
-                # 如果是长度为1的数组，提取元素；否则取第一个元素
-                if hasattr(param, 'item'):  # numpy标量有.item()方法
+                # If it's a length-1 array, extract element; otherwise take first element
+                if hasattr(param, 'item'):  # numpy scalars have .item() method
                     scalar_value = param.item()
                 elif len(param) == 1:
                     scalar_value = param[0]
                 else:
-                    scalar_value = param[0]  # 取第一个元素
+                    scalar_value = param[0]  # Take first element
             else:
                 scalar_value = float(param)
             parameter_values.append(scalar_value)
@@ -112,34 +101,35 @@ class ConstraintHandler:
         initial_temperature, initial_hold_time, ramp_rate_1, target_temperature_1, \
         hold_time_1, ramp_rate_2, target_temperature_2, hold_time_2 = parameter_values
         
-        # 检查温度约束
+        # Check temperature constraints
         if target_temperature_1 <= initial_temperature:
-            return False, "目标温度T1必须高于初始温度T_init"
+            return False, "Target temperature T1 must be higher than initial temperature T_init"
         if target_temperature_2 <= target_temperature_1:
-            return False, "目标温度T2必须高于T1"
+            return False, "Target temperature T2 must be higher than T1"
         
-        # 检查升温速率约束
+        # Check ramp rate constraints
         if ramp_rate_1 <= 0 or ramp_rate_2 <= 0:
-            return False, "升温速率必须为正数"
+            return False, "Ramp rates must be positive"
         
-        # 检查分析时间约束
+        # Check analysis time constraints
         analysis_time = self.calculate_analysis_time(parameters)
         if analysis_time < min_analysis_time or analysis_time > max_analysis_time:
-            return False, f"分析时间{analysis_time:.1f}s超出范围[{min_analysis_time}, {max_analysis_time}]"
+            return False, f"Analysis time {analysis_time:.1f}s is outside range [{min_analysis_time}, {max_analysis_time}]"
         
-        return True, "参数可行"
+        return True, "Parameters are feasible"
     
     def project_to_feasible_region(self, parameters, max_iterations=20):
-        """将参数投影到可行域
+        """Project parameters to feasible region
         
-        通过迭代调整，将不可行参数调整为满足所有约束的可行参数。
+        Through iterative adjustment, adjust infeasible parameters to feasible parameters
+        that satisfy all constraints.
         
         Args:
-            parameters: 原始参数列表
-            max_iterations: 最大迭代次数
+            parameters: Original parameter list
+            max_iterations: Maximum number of iterations
             
         Returns:
-            feasible_parameters: 投影到可行域的参数
+            feasible_parameters: Parameters projected to feasible region
         """
         # 确保参数是标量值，处理numpy数组情况
         parameter_values = []
@@ -160,16 +150,16 @@ class ConstraintHandler:
         initial_temperature, initial_hold_time, ramp_rate_1, target_temperature_1, \
         hold_time_1, ramp_rate_2, target_temperature_2, hold_time_2 = parameter_values
         
-        # 修正温度约束
+        # Correct temperature constraints
         initial_temperature = np.clip(initial_temperature, dimensions[0].low, dimensions[0].high)
         target_temperature_1 = np.clip(target_temperature_1, max(initial_temperature + 5, dimensions[3].low), dimensions[3].high)
         target_temperature_2 = np.clip(target_temperature_2, max(target_temperature_1 + 5, dimensions[6].low), dimensions[6].high)
         
-        # 修正升温速率
+        # Correct ramp rates
         ramp_rate_1 = np.clip(ramp_rate_1, dimensions[2].low, dimensions[2].high)
         ramp_rate_2 = np.clip(ramp_rate_2, dimensions[5].low, dimensions[5].high)
         
-        # 迭代调整以满足时间约束
+        # Iteratively adjust to meet time constraints
         for iteration in range(max_iterations):
             current_time = self.calculate_analysis_time(
                 [initial_temperature, initial_hold_time, ramp_rate_1, target_temperature_1, 
@@ -180,27 +170,27 @@ class ConstraintHandler:
                 break
             
             if current_time > max_analysis_time:
-                # 增加升温速率以减少分析时间
+                # Increase ramp rates to reduce analysis time
                 ramp_rate_1 = min(ramp_rate_1 * 1.10, dimensions[2].high)
                 ramp_rate_2 = min(ramp_rate_2 * 1.10, dimensions[5].high)
                 
-                # 如果升温速率已接近上限，减少保持时间
+                # If ramp rates are near upper limit, reduce hold times
                 if ramp_rate_1 >= dimensions[2].high * 0.95:
                     initial_hold_time = max(initial_hold_time * 0.95, dimensions[1].low)
                     hold_time_1 = max(hold_time_1 * 0.95, dimensions[4].low)
                     hold_time_2 = max(hold_time_2 * 0.95, dimensions[7].low)
             else:
-                # 减少升温速率以增加分析时间
+                # Decrease ramp rates to increase analysis time
                 ramp_rate_1 = max(ramp_rate_1 * 0.90, dimensions[2].low)
                 ramp_rate_2 = max(ramp_rate_2 * 0.90, dimensions[5].low)
                 
-                # 如果升温速率已接近下限，增加保持时间
+                # If ramp rates are near lower limit, increase hold times
                 if ramp_rate_1 <= dimensions[2].low * 1.05:
                     initial_hold_time = min(initial_hold_time * 1.05, dimensions[1].high)
                     hold_time_1 = min(hold_time_1 * 1.05, dimensions[4].high)
                     hold_time_2 = min(hold_time_2 * 1.05, dimensions[7].high)
         
-        # 确保所有参数在有效范围内
+        # Ensure all parameters are within valid ranges
         projected_parameters = [
             np.clip(initial_temperature, dimensions[0].low, dimensions[0].high),
             np.clip(initial_hold_time, dimensions[1].low, dimensions[1].high),
@@ -212,16 +202,16 @@ class ConstraintHandler:
             np.clip(hold_time_2, dimensions[7].low, dimensions[7].high),
         ]
         
-        # 确保参数值符合步长要求
+        # Ensure parameter values meet step size requirements
         from config import parameter_step_sizes
         adjusted_parameters = []
         for i, param_value in enumerate(projected_parameters):
             param_name = parameter_names[i]
             if param_name in parameter_step_sizes:
                 step_size = parameter_step_sizes[param_name]
-                # 将参数值四舍五入到最接近的步长倍数
+                # Round parameter value to nearest multiple of step size
                 adjusted_value = round(param_value / step_size) * step_size
-                # 再次确保在范围内
+                # Ensure within range again
                 dim_low = dimensions[i].low
                 dim_high = dimensions[i].high
                 adjusted_value = max(dim_low, min(dim_high, adjusted_value))
@@ -232,26 +222,26 @@ class ConstraintHandler:
         return adjusted_parameters
     
     def generate_random_feasible_point(self):
-        """生成随机可行点
+        """Generate random feasible point
         
-        生成满足所有约束的随机参数点。
+        Generate random parameter point that satisfies all constraints.
         
         Returns:
-            feasible_parameters: 可行的参数点
+            feasible_parameters: Feasible parameter point
         """
         for _ in range(100):
-            # 生成随机参数
+            # Generate random parameters
             raw_parameters = [np.random.uniform(dim.low, dim.high) for dim in dimensions]
-            # 确保参数符合步长要求
+            # Ensure parameters meet step size requirements
             from config import parameter_step_sizes
             parameters = []
             for i, param_value in enumerate(raw_parameters):
                 param_name = parameter_names[i]
                 if param_name in parameter_step_sizes:
                     step_size = parameter_step_sizes[param_name]
-                    # 将参数值四舍五入到最接近的步长倍数
+                    # Round parameter value to nearest multiple of step size
                     adjusted_value = round(param_value / step_size) * step_size
-                    # 确保在范围内
+                    # Ensure within range
                     dim_low = dimensions[i].low
                     dim_high = dimensions[i].high
                     adjusted_value = max(dim_low, min(dim_high, adjusted_value))
@@ -259,69 +249,70 @@ class ConstraintHandler:
                 else:
                     parameters.append(param_value)
             
-            # 检查可行性
+            # Check feasibility
             is_feasible, _ = self.is_feasible(parameters)
             if is_feasible:
                 return parameters
         
-        # 如果随机生成失败，使用启发式方法
+        # If random generation fails, use heuristic method
         return self.generate_heuristic_feasible_point()
     
     def generate_heuristic_feasible_point(self):
-        """使用启发式方法生成可行点
+        """Generate feasible point using heuristic method
         
-        基于经验和色谱理论，生成合理的可行参数点。
+        Based on experience and chromatographic theory, generate reasonable feasible parameter point.
         
         Returns:
-            feasible_parameters: 可行的参数点
+            feasible_parameters: Feasible parameter point
         """
-        # 生成合理的温度值
-        initial_temperature = np.random.uniform(45, 55)  # 常见初始温度范围
-        target_temperature_1 = np.random.uniform(85, 110)  # 轻组分分离温度
-        target_temperature_2 = np.random.uniform(245, 258)  # 重组分分离温度
+        # Generate reasonable temperature values
+        initial_temperature = np.random.uniform(45, 55)  # Common initial temperature range
+        target_temperature_1 = np.random.uniform(85, 110)  # Light component separation temperature
+        target_temperature_2 = np.random.uniform(245, 258)  # Heavy component separation temperature
         
-        # 目标分析时间（中间值）
+        # Target analysis time (midpoint)
         target_time = (min_analysis_time + max_analysis_time) / 2
         
-        # 生成合理的保持时间
-        initial_hold_time = np.random.uniform(2, 3)  # 初始保持时间
-        hold_time_1 = np.random.uniform(0, 2)  # 第一段保持时间
-        hold_time_2 = np.random.uniform(21, 25)  # 第二段保持时间
+        # Generate reasonable hold times
+        initial_hold_time = np.random.uniform(2, 3)  # Initial hold time
+        hold_time_1 = np.random.uniform(0, 2)  # First hold time
+        hold_time_2 = np.random.uniform(21, 25)  # Second hold time
         
-        # 计算总保持时间和可用的升温时间
+        # Calculate total hold time and available ramp time
         total_hold_time = initial_hold_time + hold_time_1 + hold_time_2
         available_ramp_time = target_time - total_hold_time
         
-        # 按温度范围比例分配升温时间
+        # Allocate ramp time proportionally to temperature ranges
         ramp1_time = (target_temperature_1 - initial_temperature) / (target_temperature_2 - initial_temperature) * available_ramp_time
         ramp2_time = (target_temperature_2 - target_temperature_1) / (target_temperature_2 - initial_temperature) * available_ramp_time
         
-        # 计算升温速率
+        # Calculate ramp rates
         ramp_rate_1 = (target_temperature_1 - initial_temperature) / max(ramp1_time, 0.1)
         ramp_rate_2 = (target_temperature_2 - target_temperature_1) / max(ramp2_time, 0.1)
         
-        # 确保升温速率在有效范围内
+        # Ensure ramp rates are within valid ranges
         ramp_rate_1 = np.clip(ramp_rate_1, dimensions[2].low, dimensions[2].high)
         ramp_rate_2 = np.clip(ramp_rate_2, dimensions[5].low, dimensions[5].high)
         
-        # 构建参数列表
+        # Build parameter list
         parameters = [initial_temperature, initial_hold_time, ramp_rate_1, target_temperature_1, 
                      hold_time_1, ramp_rate_2, target_temperature_2, hold_time_2]
         
-        # 投影到可行域
+        # Project to feasible region
         return self.project_to_feasible_region(parameters)
 
 
-# 全局约束处理器实例
+# Global constraint handler instance
 constraint_handler = ConstraintHandler()
 
+
 def get_initial_parameter_points():
-    """获取初始参数点
+    """Get initial parameter points
     
-    从初始点库中获取经过可行性处理的初始参数点。
+    Get initial parameter points from the initial point library after feasibility processing.
     
     Returns:
-        initial_points: 处理后的初始参数点列表
+        initial_points: List of processed initial parameter points
     """
     return [
         constraint_handler.project_to_feasible_region(point) 
