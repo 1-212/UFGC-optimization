@@ -12,10 +12,10 @@ from datetime import datetime
 from skopt import Optimizer
 
 from config import *
-from core.constraint import ConstraintHandler, get_initial_points
-from core.optimizer import create_gp_regressor, StoppingCriteria, MultiFidelityOptimizer
+from core.constraint import ConstraintHandler, get_initial_parameter_points
+from core.optimizer import create_gp_regressor, StoppingCriteria, BayesianOptimizer
 from data.manager import ExperimentDataManager
-from data.asc_parser import process_asc_files, calculate_crf_from_asc_data, calculate_signals_and_regions_from_asc_data
+from data.asc_parser import process_asc_files, calculate_crf_from_asc_data, extract_signals_and_regions_from_asc_data
 from visualization.plotter import VisualizationManager
 from utils.file_handler import FileHandler
 from utils.logger import logger
@@ -26,11 +26,11 @@ class BayesianOptimizationUI:
 
     def __init__(self, root):
         self.root = root
-        self.root.title(UI_CONFIG['window_title'])
-        self.root.geometry(UI_CONFIG['window_size'])
+        self.root.title(ui_config['window_title'])
+        self.root.geometry(ui_config['window_size'])
 
         # 路径与目录
-        self.work_dir = WORK_DIR
+        self.work_dir = work_directory
         self.data_dir = os.path.join(self.work_dir, "data")
         self.results_dir = os.path.join(self.work_dir, "results")
         self.checkpoint_dir = os.path.join(self.work_dir, "checkpoints")
@@ -67,6 +67,7 @@ class BayesianOptimizationUI:
                 self.restore_optimization_state()
 
         self.update_status()
+        self.update_stopping_criteria_display()
         logger.info("应用已启动（增强版）")
 
     # ----------------------- 历史存取 -----------------------
@@ -78,7 +79,7 @@ class BayesianOptimizationUI:
             return False
 
         if exp_data:
-            self.experiment_data.data = exp_data
+            self.experiment_data.experiment_data = exp_data
 
         self.current_round = state.get('current_round', 0)
         self.initial_points_used = state.get('initial_points_used', 0)
@@ -89,7 +90,7 @@ class BayesianOptimizationUI:
         # 恢复 next_params（如果有待评分）
         if self.has_pending_params and self.current_round > 0:
             # 上一轮是待评分的（current_round 指向已生成但未提交的轮次）
-            for exp in self.experiment_data.get_all():
+            for exp in self.experiment_data.get_all_experiments():
                 if exp['round'] == self.current_round - 1:
                     self.next_params = exp['params']
                     break
@@ -107,7 +108,7 @@ class BayesianOptimizationUI:
             'stop_reason': self.stop_reason,
             'timestamp': datetime.now().isoformat()
         }
-        FileHandler.save_checkpoint(state, self.experiment_data.get_all())
+        FileHandler.save_checkpoint(state, self.experiment_data.get_all_experiments())
 
     # ----------------------- 恢复与重建 -----------------------
     def restore_optimization_state(self):
@@ -152,25 +153,19 @@ class BayesianOptimizationUI:
     def rebuild_optimizer(self):
         """用历史样本重建 Skopt Optimizer 并可选拟合 GP"""
         try:
-            # 使用多保真度优化器并用历史数据填充
-            self.optimizer = MultiFidelityOptimizer(dimensions=PARAM_DIMENSIONS)
+            # 使用贝叶斯优化器并用历史数据填充
+            self.optimizer = BayesianOptimizer()
 
-            for exp in self.experiment_data.get_all():
-                # 历史数据若包含 'fidelity' 字段则使用，否则默认 LF
-                fidelity = exp.get('fidelity', 'lf')
+            for exp in self.experiment_data.get_all_experiments():
                 # 记录时使用复合评分（若存在），否则使用 score
                 score = exp.get('composite_score', exp.get('score', 0.0))
                 try:
-                    self.optimizer.tell(exp['params'], score, fidelity=fidelity)
+                    self.optimizer.tell(exp['params'], score)
                 except Exception:
-                    # 若直接 tell 失败，尝试作为 LF
-                    try:
-                        self.optimizer.tell(exp['params'], score, fidelity='lf')
-                    except Exception:
-                        pass
+                    pass
 
-            # 若样本足够，也可尝试对内部 GP 做一次拟合（由 MultiFidelityOptimizer 自动管理）
-            logger.info("多保真度优化器已基于历史样本重建")
+            # 若样本足够，也可尝试对内部 GP 做一次拟合
+            logger.info("贝叶斯优化器已基于历史样本重建")
 
         except Exception as e:
             logger.error(f"重建优化器失败: {e}")
@@ -182,7 +177,7 @@ class BayesianOptimizationUI:
             # StoppingCriteria 使用 STOPPING_CONFIG 内部配置，无需显式传参
             self.stopping_criteria = StoppingCriteria()
 
-            for exp in self.experiment_data.get_all():
+            for exp in self.experiment_data.get_all_experiments():
                 self.stopping_criteria.update(exp['score'], exp['params'])
 
             logger.info("停止条件已重建")
@@ -195,7 +190,7 @@ class BayesianOptimizationUI:
         try:
             self.result_text.delete(1.0, tk.END)
 
-            all_experiments = self.experiment_data.get_all()
+            all_experiments = self.experiment_data.get_all_experiments()
             if not all_experiments:
                 self.result_text.insert(tk.END, "暂无历史数据\n")
                 return
@@ -211,7 +206,7 @@ class BayesianOptimizationUI:
             initial_df = df[df['is_initial']]
             optimized_df = df[~df['is_initial']]
 
-            self.result_text.insert(tk.END, f"  • 初始点: {len(initial_df)}/{MAX_INITIAL_POINTS}\n")
+            self.result_text.insert(tk.END, f"  • 初始点: {len(initial_df)}/{max_initial_points}\n")
             self.result_text.insert(tk.END, f"  • 优化点: {len(optimized_df)}\n\n")
 
             self.result_text.insert(tk.END, f"CRF值统计:\n")
@@ -239,27 +234,37 @@ class BayesianOptimizationUI:
             logger.error(f"显示历史摘要失败: {e}")
             self.result_text.insert(tk.END, f"❌ 显示历史摘要失败: {e}\n")
 
-    def compute_composite_score(self, crf_value, analysis_time):
+    def compute_composite_score(self, crf_value, analysis_time, iteration, total_iterations):
         """计算复合评分：在 CRF 基础上加入分析时间惩罚。
 
-        采用配置：ANALYSIS_TIME_TARGET, ANALYSIS_TIME_WEIGHT, ANALYSIS_TIME_PENALTY
-        - penalty (squared): ((t - T)/T)**2
-        - penalty (absolute): abs((t - T)/T)
-        composite = crf - weight * penalty
+        采用新的时间惩罚公式：
+        f_time = 1 - (t - T_min) / (T_max - T_min)
+        w_sep = 0.7 + 0.3 * (1 - n/N)
+        w_time = 1 - w_sep
+        composite = w_sep * f_sep + w_time * f_time
+        其中：
+        - t: 实际分析时间
+        - T_min: 最小分析时间 (80s)
+        - T_max: 最大分析时间 (300s)
+        - n: 当前迭代次数
+        - N: 总迭代次数
+        - f_sep: 原始CRF值
         返回复合评分（float）
         """
         try:
-            T = ANALYSIS_TIME_TARGET
-            w = ANALYSIS_TIME_WEIGHT
-            ptype = ANALYSIS_TIME_PENALTY
-
-            rel = (analysis_time - T) / float(T)
-            if ptype == 'squared':
-                penalty = rel ** 2
-            else:
-                penalty = abs(rel)
-
-            composite = float(crf_value) - float(w) * float(penalty)
+            # 计算时间函数 f_time
+            t_min = 80  # 最小分析时间
+            t_max = 300 # 最大分析时间
+            f_time = 1 - (analysis_time - t_min) / (t_max - t_min)
+            f_time = max(0.0, min(1.0, f_time))  # 限制在[0,1]范围内
+            
+            # 计算权重
+            w_sep = 0.7 + 0.3 * (1 - iteration / total_iterations)
+            w_time = 1 - w_sep
+            
+            # 计算复合评分
+            f_sep = float(crf_value)
+            composite = w_sep * f_sep + w_time * f_time
             # 保证数值稳定性
             return composite
         except Exception as e:
@@ -412,7 +417,7 @@ class BayesianOptimizationUI:
         else:
             self.progress_var.set("未开始")
 
-        all_experiments = self.experiment_data.get_all()
+        all_experiments = self.experiment_data.get_all_experiments()
         if all_experiments:
             best_score = max([e['score'] for e in all_experiments])
             self.best_var.set(f"最佳: {best_score:.4f}")
@@ -427,7 +432,7 @@ class BayesianOptimizationUI:
     def show_initial_points(self):
         self.param_text.delete(1.0, tk.END)
 
-        initial_points = get_initial_points()
+        initial_points = get_initial_parameter_points()
 
         self.param_text.insert(tk.END, "="*50 + "\n")
         self.param_text.insert(tk.END, "   初始实验点设计 (共10个)\n")
@@ -447,8 +452,8 @@ class BayesianOptimizationUI:
 
             self.param_text.insert(tk.END, f"{used_marker}【初始点 #{idx+1}】({status})\n")
 
-            for i, (name, value) in enumerate(zip(PARAM_NAMES, point)):
-                unit = PARAM_UNITS[name]
+            for i, (name, value) in enumerate(zip(parameter_names, point)):
+                unit = parameter_units[name]
                 # 确保value是标量值，处理numpy数组情况
                 if hasattr(value, '__len__') and hasattr(value, '__getitem__'):
                     # 如果是numpy标量，使用.item()方法
@@ -486,7 +491,7 @@ class BayesianOptimizationUI:
         self.root.update()
 
         try:
-            df = process_asc_files(self.current_asc_files, use_half=True)
+            df = process_asc_files(self.current_asc_files, use_half_data=True)
 
             if df is not None:
                 # 保存ASC数据，用于新ECRF计算
@@ -516,7 +521,7 @@ class BayesianOptimizationUI:
 
     # ----------------------- 初始化 / 生成参数 -----------------------
     def initialize_optimization(self):
-        all_experiments = self.experiment_data.get_all()
+        all_experiments = self.experiment_data.get_all_experiments()
 
         if all_experiments:
             choice = messagebox.askyesno(
@@ -575,15 +580,15 @@ class BayesianOptimizationUI:
         self.initial_points_used = 0
         self.has_pending_params = False
 
-        initial_points = get_initial_points()
-        initial_points = [self.constraint_handler.project_to_feasible(p) for p in initial_points]
+        initial_points = get_initial_parameter_points()
+        initial_points = [self.constraint_handler.project_to_feasible_region(p) for p in initial_points]
 
-        # 使用多保真度优化器（AR-CoK）替代原有 Skopt Optimizer
-        self.optimizer = MultiFidelityOptimizer(dimensions=PARAM_DIMENSIONS)
+        # 使用贝叶斯优化器
+        self.optimizer = BayesianOptimizer()
 
         for point in initial_points:
-            # 初始点作为低保真度供热启动使用
-            self.optimizer.tell(point, 0.0, fidelity='lf')
+            # 初始点作为供热启动使用
+            self.optimizer.tell(point, 0.0)
 
         self.viz_manager.set_gp_model(self.optimizer.base_estimator_)
 
@@ -591,8 +596,8 @@ class BayesianOptimizationUI:
         self.result_text.insert(tk.END, f"\n{'='*45}\n")
         self.result_text.insert(tk.END, f"🚀 新的贝叶斯优化已初始化\n")
         self.result_text.insert(tk.END, f"{'='*45}\n")
-        self.result_text.insert(tk.END, f"初始点数: {MAX_INITIAL_POINTS}\n")
-        self.result_text.insert(tk.END, f"分析时间范围: {MIN_ANALYSIS_TIME}-{MAX_ANALYSIS_TIME}秒\n")
+        self.result_text.insert(tk.END, f"初始点数: {max_initial_points}\n")
+        self.result_text.insert(tk.END, f"分析时间范围: {min_analysis_time}-{max_analysis_time}秒\n")
         self.result_text.insert(tk.END, f"{'='*45}\n\n")
         self.result_text.insert(tk.END, f"💡 接下来请点击【⚡生成下一参数】来开始优化\n\n")
         self.result_text.see(tk.END)
@@ -621,32 +626,28 @@ class BayesianOptimizationUI:
 
     def _generate_next_params_impl(self):
         try:
-            if self.generate_retry_count >= GENERATE_RETRY_LIMIT:
+            if self.generate_retry_count >= generate_retry_limit:
                 messagebox.showerror(
                     "错误",
-                    f"⚠️ 连续{GENERATE_RETRY_LIMIT}次无法生成满足约束的参数\n"
+                    f"⚠️ 连续{generate_retry_limit}次无法生成满足约束的参数\n"
                     f"建议调整参数约束条件"
                 )
                 return
 
-            if self.initial_points_used < MAX_INITIAL_POINTS:
-                initial_points = get_initial_points()
+            if self.initial_points_used < max_initial_points:
+                initial_points = get_initial_parameter_points()
                 next_point = initial_points[self.initial_points_used]
                 source = "初始点库"
-                self.next_params_fidelity = 'lf'
             else:
                 try:
                     next_point = self.optimizer.ask()
                     source = "优化器"
-                    # 记录优化器建议的保真度（'lf' 或 'hf'）以便提示用户
-                    self.next_params_fidelity = getattr(self.optimizer, 'last_suggested_fidelity', 'lf')
                 except Exception as e:
                     logger.warning(f"优化器生成失败: {e}，使用启发式方法")
                     next_point = self.constraint_handler.generate_feasible_heuristic()
                     source = "启发式方法"
-                    self.next_params_fidelity = 'lf'
 
-            self.next_params = self.constraint_handler.project_to_feasible(next_point)
+            self.next_params = self.constraint_handler.project_to_feasible_region(next_point)
 
             is_feasible, msg = self.constraint_handler.is_feasible(self.next_params)
 
@@ -662,7 +663,7 @@ class BayesianOptimizationUI:
             self.current_round += 1
             self.generate_retry_count = 0
 
-            is_initial = self.initial_points_used < MAX_INITIAL_POINTS
+            is_initial = self.initial_points_used < max_initial_points
 
             if is_initial:
                 self.show_initial_points()
@@ -675,12 +676,8 @@ class BayesianOptimizationUI:
             analysis_time = self.constraint_handler.calculate_analysis_time(self.next_params)
 
             self.result_text.insert(tk.END, f"\n✓ 第 {self.current_round} 轮参数已生成 ({point_type}, 来源: {source})\n")
-            self.result_text.insert(tk.END, f"分析时间: {analysis_time:.1f}s (范围: {MIN_ANALYSIS_TIME}-{MAX_ANALYSIS_TIME}s)\n")
+            self.result_text.insert(tk.END, f"分析时间: {analysis_time:.1f}s (范围: {min_analysis_time}-{max_analysis_time}s)\n")
             self.result_text.insert(tk.END, f"⏳ 请运行实验并输入CRF值\n\n")
-            if getattr(self, 'next_params_fidelity', 'lf') == 'hf':
-                self.result_text.insert(tk.END, f"⏳ 建议高保真度 (HF)：请对该参数组合运行 {self.optimizer.hf_repeat} 次 GC 实验，并提交平均 CRF 值\n\n")
-            else:
-                self.result_text.insert(tk.END, f"⏳ 请运行实验并输入CRF值\n\n")
             self.result_text.see(tk.END)
 
             self.update_status()
@@ -734,23 +731,22 @@ class BayesianOptimizationUI:
                 'score': crf_value,
                 'analysis_time': analysis_time,
                 'timestamp': datetime.now().isoformat(),
-                'is_initial': self.initial_points_used < MAX_INITIAL_POINTS
+                'is_initial': self.initial_points_used < max_initial_points
             }
 
-            if len(test_exp['params']) != len(PARAM_NAMES):
+            if len(test_exp['params']) != len(parameter_names):
                 raise ValueError(
-                    f"参数长度不匹配: {len(test_exp['params'])} != {len(PARAM_NAMES)}"
+                    f"参数长度不匹配: {len(test_exp['params'])} != {len(parameter_names)}"
                 )
 
-            # 计算复合分数并保存到记录（用于 GP 拟合与优化目标）
-            composite_score = self.compute_composite_score(crf_value, analysis_time)
-            test_exp['composite_score'] = composite_score
-            
-            # 计算新ECRF，无论是否有ASC数据
             # 获取当前迭代次数
             status = self.stopping_criteria.get_status()
             current_iteration = status.get('iteration', 1)
             total_iterations = self.stopping_criteria.max_iterations
+            
+            # 计算复合分数并保存到记录（用于 GP 拟合与优化目标）
+            composite_score = self.compute_composite_score(crf_value, analysis_time, current_iteration, total_iterations)
+            test_exp['composite_score'] = composite_score
             
             # 计算时间函数 f_time
             # 假设合理的T_min和T_max值
@@ -761,16 +757,16 @@ class BayesianOptimizationUI:
             
             # 根据是否有ASC数据决定f_sep的计算方式
             if hasattr(self, '_current_asc_df') and self._current_asc_df is not None:
-                from core.signal_process import calculate_new_ecrf
-                signal_data, regions = calculate_signals_and_regions_from_asc_data(self._current_asc_df)
+                from core.signal_process import calculate_ecrf_comprehensive
+                signal_data, regions = extract_signals_and_regions_from_asc_data(self._current_asc_df)
                 if signal_data is not None and len(regions) > 0:
                     # 有ASC数据时，使用完整的新ECRF计算
                     try:
-                        new_ecrf = calculate_new_ecrf(
+                        new_ecrf = calculate_ecrf_comprehensive(
                             signal=signal_data,
-                            regions=regions,
+                            peak_regions=regions,
                             analysis_time=analysis_time,
-                            iteration_num=current_iteration,
+                            current_iteration=current_iteration,
                             total_iterations=total_iterations
                         )
                         test_exp['ecrf'] = new_ecrf
@@ -796,7 +792,7 @@ class BayesianOptimizationUI:
                 w_time = 1 - w_sep
                 simplified_ecrf = w_sep * f_sep + w_time * f_time
                 test_exp['ecrf'] = simplified_ecrf
-            self.experiment_data.append(test_exp)
+            self.experiment_data.add_experiment(test_exp)
 
             try:
                 # 优先使用新ECRF作为优化目标，否则使用传统复合评分
@@ -819,7 +815,7 @@ class BayesianOptimizationUI:
 
             if len(self.experiment_data) >= 5:
                 try:
-                    all_experiments = self.experiment_data.get_all()
+                    all_experiments = self.experiment_data.get_all_experiments()
                     X_data = np.array([exp['params'] for exp in all_experiments])
                     y_data = np.array([exp.get('composite_score', exp['score']) for exp in all_experiments])
 
@@ -910,9 +906,9 @@ class BayesianOptimizationUI:
         self.param_text.insert(tk.END, "【待执行】\n")
         self.param_text.insert(tk.END, "="*50 + "\n\n")
 
-        for i, (name, value) in enumerate(zip(PARAM_NAMES, params)):
-            unit = PARAM_UNITS[name]
-            dim = PARAM_DIMENSIONS[i]
+        for i, (name, value) in enumerate(zip(parameter_names, params)):
+            unit = parameter_units[name]
+            dim = parameter_dimensions[i]
             # 确保value是标量值，处理numpy数组情况
             if hasattr(value, '__len__') and hasattr(value, '__getitem__'):
                 # 如果是numpy标量，使用.item()方法
@@ -929,12 +925,12 @@ class BayesianOptimizationUI:
         analysis_time = self.constraint_handler.calculate_analysis_time(params)
         self.param_text.insert(tk.END, f"\n{'分析时间':<12}: {analysis_time:>8.1f} s")
 
-        if analysis_time > MAX_ANALYSIS_TIME:
-            self.param_text.insert(tk.END, f" ❌ (超过限制 {MAX_ANALYSIS_TIME}s)\n")
-        elif analysis_time < MIN_ANALYSIS_TIME:
-            self.param_text.insert(tk.END, f" ⚠️ (低于最小 {MIN_ANALYSIS_TIME}s)\n")
+        if analysis_time > max_analysis_time:
+            self.param_text.insert(tk.END, f" ❌ (超过限制 {max_analysis_time}s)\n")
+        elif analysis_time < min_analysis_time:
+            self.param_text.insert(tk.END, f" ⚠️ (低于最小 {min_analysis_time}s)\n")
         else:
-            margin = min(analysis_time - MIN_ANALYSIS_TIME, MAX_ANALYSIS_TIME - analysis_time)
+            margin = min(analysis_time - min_analysis_time, max_analysis_time - analysis_time)
             self.param_text.insert(tk.END, f" ✓ (裕度: ±{margin:.1f}s)\n")
 
         if is_feasible:
@@ -955,7 +951,7 @@ class BayesianOptimizationUI:
     def update_stats(self):
         self.stats_text.delete(1.0, tk.END)
 
-        all_experiments = self.experiment_data.get_all()
+        all_experiments = self.experiment_data.get_all_experiments()
 
         if not all_experiments:
             self.stats_text.insert(tk.END, "暂无数据\n")
@@ -971,7 +967,7 @@ class BayesianOptimizationUI:
         optimized_df = df[~df['is_initial']]
 
         self.stats_text.insert(tk.END, f"总轮次: {len(df)}\n")
-        self.stats_text.insert(tk.END, f"  初始点: {len(initial_df)}/{MAX_INITIAL_POINTS}\n")
+        self.stats_text.insert(tk.END, f"  初始点: {len(initial_df)}/{max_initial_points}\n")
         self.stats_text.insert(tk.END, f"  优化点: {len(optimized_df)}\n\n")
 
         self.stats_text.insert(tk.END, f"平均CRF: {df['score'].mean():.4f}\n")
@@ -993,8 +989,8 @@ class BayesianOptimizationUI:
         self.stats_text.insert(tk.END, f"CRF值: {best_row['score']:.4f}\n")
         self.stats_text.insert(tk.END, f"分析时间: {best_row['analysis_time']:.1f}s\n\n")
 
-        for i, (name, value) in enumerate(zip(PARAM_NAMES, best_row['params'])):
-            unit = PARAM_UNITS[name]
+        for i, (name, value) in enumerate(zip(parameter_names, best_row['params'])):
+            unit = parameter_units[name]
             # 确保value是标量值，处理numpy数组情况
             if hasattr(value, '__len__') and hasattr(value, '__getitem__'):
                 # 如果是numpy标量，使用.item()方法
@@ -1011,7 +1007,7 @@ class BayesianOptimizationUI:
     def update_history(self):
         self.history_text.delete(1.0, tk.END)
 
-        all_experiments = self.experiment_data.get_all()
+        all_experiments = self.experiment_data.get_all_experiments()
 
         if not all_experiments:
             self.history_text.insert(tk.END, "暂无数据\n")
@@ -1077,7 +1073,11 @@ class BayesianOptimizationUI:
 
         best_score = status['best_score']
         target = self.stopping_criteria.target_score
-        progress3 = (best_score / target) * 100 if target > 0 else 0
+        if target > 0 and best_score != -np.inf:
+            progress3 = (best_score / target) * 100
+            progress3 = max(0, min(100, progress3))  # 限制在0-100之间
+        else:
+            progress3 = 0
         self.stop_text.insert(tk.END, f"3️⃣ 目标评分\n")
         self.stop_text.insert(tk.END, f"   {best_score:.4f}/{target:.4f} ({progress3:.1f}%)\n")
         self.stop_text.insert(tk.END, f"   {'█' * int(progress3/5)}{'░' * (20-int(progress3/5))}\n\n")
@@ -1120,7 +1120,7 @@ class BayesianOptimizationUI:
             self.status_var.set("正在生成图表...")
             self.root.update()
 
-            all_experiments = self.experiment_data.get_all()
+            all_experiments = self.experiment_data.get_all_experiments()
 
             fig1 = self.viz_manager.plot_convergence_curve(all_experiments)
             if fig1:
@@ -1152,7 +1152,7 @@ class BayesianOptimizationUI:
 
     def export_results(self):
         """导出结果为 CSV"""
-        all_experiments = self.experiment_data.get_all()
+        all_experiments = self.experiment_data.get_all_experiments()
 
         if not all_experiments:
             messagebox.showwarning("警告", "暂无数据可导出")
@@ -1188,7 +1188,7 @@ class BayesianOptimizationUI:
 
     def reset_all(self):
         """重置并备份历史数据"""
-        all_experiments = self.experiment_data.get_all()
+        all_experiments = self.experiment_data.get_all_experiments()
 
         if all_experiments and messagebox.askyesno("确认",
             "确定要重置所有数据并开始新的优化吗?\n\n"
@@ -1204,7 +1204,7 @@ class BayesianOptimizationUI:
                 df.to_csv(backup_file, index=False, encoding='utf-8-sig')
                 logger.info(f"✓ 旧数据已备份: {backup_file}")
 
-            self.experiment_data.clear()
+            self.experiment_data.clear_data()
             self.current_round = 0
             self.initial_points_used = 0
             self.next_params = None

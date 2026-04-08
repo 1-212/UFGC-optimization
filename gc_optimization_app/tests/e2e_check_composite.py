@@ -13,7 +13,7 @@ at = app.constraint_handler.calculate_analysis_time(params)
 print('analysis_time', at)
 app.crf_var.set('0.88')
 app.submit_crf_and_generate_next()
-last = app.experiment_data.get_all()[-1]
+last = app.experiment_data.get_all_experiments()[-1]
 print('last experiment:', last)
 print('composite_score:', last.get('composite_score'))
 root.destroy()

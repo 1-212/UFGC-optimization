@@ -1,4 +1,11 @@
-"""可视化模块"""
+"""GC优化系统可视化模块
+
+本模块实现了系统的可视化功能，包括收敛曲线、分析时间分布、参数敏感性分析和高维参数空间探索等图表。
+通过直观的可视化展示，帮助研究人员理解优化过程和结果。
+
+作者: 研究团队
+日期: 2026年
+"""
 
 import os
 import matplotlib.pyplot as plt
@@ -7,7 +14,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from scipy.interpolate import griddata
-from config import PARAM_NAMES, PARAM_UNITS, MAX_ANALYSIS_TIME, MIN_ANALYSIS_TIME
+from config import parameter_names, parameter_units, max_analysis_time, min_analysis_time
 
 # 设置中文字体
 try:
@@ -20,55 +27,85 @@ plt.rcParams['figure.dpi'] = 100
 plt.rcParams['savefig.dpi'] = 300
 
 class VisualizationManager:
-    """可视化管理器"""
+    """GC优化系统可视化管理器
+    
+    负责系统结果的可视化展示，生成各种分析图表。
+    """
     
     def __init__(self, work_dir="gc_optimization"):
+        """初始化可视化管理器
+        
+        Args:
+            work_dir: 工作目录
+        """
         self.work_dir = work_dir
-        self.viz_dir = os.path.join(work_dir, "visualizations")
-        os.makedirs(self.viz_dir, exist_ok=True)
+        self.visualization_directory = os.path.join(work_dir, "visualizations")
+        os.makedirs(self.visualization_directory, exist_ok=True)
         self.gp_model = None
     
     def set_gp_model(self, gp):
-        """设置GP模型"""
+        """设置GP模型
+        
+        Args:
+            gp: 高斯过程模型
+        """
         self.gp_model = gp
     
     def save_figure(self, fig, name, dpi=300):
-        """保存图表"""
+        """保存图表
+        
+        Args:
+            fig: 图表对象
+            name: 图表名称
+            dpi: 分辨率
+            
+        Returns:
+            tuple: (PNG路径, PDF路径)
+        """
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        png_path = os.path.join(self.viz_dir, f"{name}_{timestamp}.png")
-        pdf_path = os.path.join(self.viz_dir, f"{name}_{timestamp}.pdf")
+        png_path = os.path.join(self.visualization_directory, f"{name}_{timestamp}.png")
+        pdf_path = os.path.join(self.visualization_directory, f"{name}_{timestamp}.pdf")
         
         fig.savefig(png_path, dpi=dpi, bbox_inches='tight', format='png')
         fig.savefig(pdf_path, dpi=dpi, bbox_inches='tight', format='pdf')
         
-        print(f"✓ 图表已保存: {png_path}")
+        print(f"OK 图表已保存: {png_path}")
         return png_path, pdf_path
     
     def plot_convergence_curve(self, experiment_data):
-        """绘制收敛曲线"""
+        """绘制收敛曲线
+        
+        展示优化过程中CRF评分的变化趋势。
+        
+        Args:
+            experiment_data: 实验数据列表
+            
+        Returns:
+            matplotlib.figure.Figure: 收敛曲线图表
+        """
         if len(experiment_data) < 1:
             return None
         
-        df = pd.DataFrame(experiment_data)
+        dataframe = pd.DataFrame(experiment_data)
         
         fig, ax = plt.subplots(figsize=(12, 7), dpi=100)
         
-        ax.plot(df.index + 1, df['score'], 'o-', linewidth=2.5, 
+        ax.plot(dataframe.index + 1, dataframe['score'], 'o-', linewidth=2.5, 
                markersize=8, label='当前评分', color='#1f77b4', alpha=0.7)
         
-        best_scores = df['score'].cummax()
-        ax.plot(df.index + 1, best_scores, 's-', linewidth=3, 
+        best_scores = dataframe['score'].cummax()
+        ax.plot(dataframe.index + 1, best_scores, 's-', linewidth=3, 
                markersize=8, label='最佳评分（累积）', color='#d62728')
         
-        initial_mask = df['is_initial']
+        initial_mask = dataframe['is_initial']
         if initial_mask.sum() > 0:
-            ax.scatter(df[initial_mask].index + 1, df[initial_mask]['score'], 
+            ax.scatter(dataframe[initial_mask].index + 1, dataframe[initial_mask]['score'], 
                       color='#2ca02c', s=150, marker='^', label='初始点', 
                       zorder=5, edgecolors='black', linewidth=1.5)
         
         optimized_mask = ~initial_mask
         if optimized_mask.sum() > 0:
-            ax.scatter(df[optimized_mask].index + 1, df[optimized_mask]['score'], 
+            ax.scatter(dataframe[optimized_mask].index + 1, dataframe[optimized_mask]['score'], 
                       color='#ff7f0e', s=150, marker='o', label='优化点', 
                       zorder=5, edgecolors='black', linewidth=1.5)
         
@@ -83,21 +120,30 @@ class VisualizationManager:
         return fig
     
     def plot_analysis_time_distribution(self, experiment_data):
-        """绘制分析时间分布"""
+        """绘制分析时间分布
+        
+        展示分析时间的变化趋势和分布情况。
+        
+        Args:
+            experiment_data: 实验数据列表
+            
+        Returns:
+            matplotlib.figure.Figure: 分析时间分布图表
+        """
         if len(experiment_data) < 1:
             return None
         
-        df = pd.DataFrame(experiment_data)
+        dataframe = pd.DataFrame(experiment_data)
         
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5), dpi=100)
         
-        ax1.plot(df.index + 1, df['analysis_time'], 'o-', linewidth=2.5, 
+        ax1.plot(dataframe.index + 1, dataframe['analysis_time'], 'o-', linewidth=2.5, 
                 markersize=8, color='#1f77b4', label='分析时间')
-        ax1.axhline(y=MAX_ANALYSIS_TIME, color='#d62728', linestyle='--', 
-                   linewidth=2.5, label=f'最大限制 ({MAX_ANALYSIS_TIME}s)')
-        ax1.axhline(y=MIN_ANALYSIS_TIME, color='#2ca02c', linestyle='--', 
-                   linewidth=2.5, label=f'最小限制 ({MIN_ANALYSIS_TIME}s)')
-        ax1.fill_between(df.index + 1, MIN_ANALYSIS_TIME, MAX_ANALYSIS_TIME, 
+        ax1.axhline(y=max_analysis_time, color='#d62728', linestyle='--', 
+                   linewidth=2.5, label=f'最大限制 ({max_analysis_time}s)')
+        ax1.axhline(y=min_analysis_time, color='#2ca02c', linestyle='--', 
+                   linewidth=2.5, label=f'最小限制 ({min_analysis_time}s)')
+        ax1.fill_between(dataframe.index + 1, min_analysis_time, max_analysis_time, 
                         alpha=0.1, color='gray', label='有效范围')
         
         ax1.set_xlabel('迭代次数', fontsize=12, fontweight='bold')
@@ -106,10 +152,10 @@ class VisualizationManager:
         ax1.grid(True, alpha=0.3, linestyle='--')
         ax1.legend(fontsize=10)
         
-        initial_times = df[df['is_initial']]['analysis_time']
-        optimized_times = df[~df['is_initial']]['analysis_time']
+        initial_times = dataframe[dataframe['is_initial']]['analysis_time']
+        optimized_times = dataframe[~dataframe['is_initial']]['analysis_time']
         
-        bins = np.linspace(df['analysis_time'].min()-10, df['analysis_time'].max()+10, 15)
+        bins = np.linspace(dataframe['analysis_time'].min()-10, dataframe['analysis_time'].max()+10, 15)
         
         ax2.hist(initial_times, bins=bins, alpha=0.6, label='初始点', 
                 color='#2ca02c', edgecolor='black', linewidth=1.2)
@@ -126,13 +172,22 @@ class VisualizationManager:
         return fig
     
     def plot_parameter_sensitivity(self, experiment_data):
-        """绘制参数敏感性"""
+        """绘制参数敏感性
+        
+        分析各个参数对CRF评分的影响。
+        
+        Args:
+            experiment_data: 实验数据列表
+            
+        Returns:
+            matplotlib.figure.Figure: 参数敏感性分析图表
+        """
         if len(experiment_data) < 3:
             return None
         
-        df = pd.DataFrame(experiment_data)
-        params_array = np.array(df['params'].tolist())
-        scores = df['score'].values
+        dataframe = pd.DataFrame(experiment_data)
+        params_array = np.array(dataframe['params'].tolist())
+        scores = dataframe['score'].values
         
         fig, axes = plt.subplots(3, 3, figsize=(16, 14), dpi=100)
         axes = axes.flatten()
@@ -140,8 +195,8 @@ class VisualizationManager:
         for idx in range(8):
             ax = axes[idx]
             
-            param_name = PARAM_NAMES[idx]
-            param_unit = PARAM_UNITS[param_name]
+            param_name = parameter_names[idx]
+            param_unit = parameter_units[param_name]
             param_values = params_array[:, idx]
             
             sorted_indices = np.argsort(param_values)
@@ -149,7 +204,7 @@ class VisualizationManager:
             sorted_scores = scores[sorted_indices]
             
             scatter = ax.scatter(sorted_params, sorted_scores, 
-                               c=df.index, cmap='viridis', s=120, 
+                               c=dataframe.index, cmap='viridis', s=120, 
                                alpha=0.7, edgecolors='black', linewidth=1.5)
             
             if len(sorted_params) > 2:
@@ -174,18 +229,27 @@ class VisualizationManager:
         return fig
     
     def plot_high_dimensional_space(self, experiment_data):
-        """绘制高维参数空间"""
+        """绘制高维参数空间
+        
+        展示参数之间的相互影响和最佳参数区域。
+        
+        Args:
+            experiment_data: 实验数据列表
+            
+        Returns:
+            matplotlib.figure.Figure: 高维参数空间图表
+        """
         if len(experiment_data) < 2:
             return None
         
-        df = pd.DataFrame(experiment_data)
-        params_array = np.array(df['params'].tolist())
-        scores = df['score'].values
+        dataframe = pd.DataFrame(experiment_data)
+        params_array = np.array(dataframe['params'].tolist())
+        scores = dataframe['score'].values
         
         key_pairs = [
-            (0, 2, 'T_init', 'R1'),
-            (3, 6, 'T1', 'T2'),
-            (2, 5, 'R1', 'R2')
+            (0, 2, 'initial_temperature', 'ramp_rate_1'),
+            (3, 6, 'target_temperature_1', 'target_temperature_2'),
+            (2, 5, 'ramp_rate_1', 'ramp_rate_2')
         ]
         
         fig, axes = plt.subplots(1, 3, figsize=(18, 5), dpi=100)
@@ -200,10 +264,19 @@ class VisualizationManager:
             grid_y = np.linspace(param2_values.min(), param2_values.max(), 50)
             grid_X, grid_Y = np.meshgrid(grid_x, grid_y)
             
-            grid_Z = griddata(
-                (param1_values, param2_values), scores,
-                (grid_X, grid_Y), method='cubic'
-            )
+            # 检查数据维度，避免Qhull错误
+            if len(np.unique(param1_values)) < 2 or len(np.unique(param2_values)) < 2:
+                # 如果数据是低维的，使用线性插值
+                grid_Z = griddata(
+                    (param1_values, param2_values), scores,
+                    (grid_X, grid_Y), method='linear'
+                )
+            else:
+                # 正常情况下使用三次插值
+                grid_Z = griddata(
+                    (param1_values, param2_values), scores,
+                    (grid_X, grid_Y), method='cubic'
+                )
             
             contour = ax.contourf(grid_X, grid_Y, grid_Z, levels=15, cmap='RdYlGn', alpha=0.8)
             ax.contour(grid_X, grid_Y, grid_Z, levels=8, colors='black', alpha=0.3, linewidths=0.5)
@@ -212,9 +285,9 @@ class VisualizationManager:
                                cmap='RdYlGn', s=150, edgecolors='black', 
                                linewidth=1.5, vmin=0, vmax=1, zorder=5)
             
-            ax.set_xlabel(f'{param1_name} ({PARAM_UNITS[param1_name]})', 
+            ax.set_xlabel(f'{param1_name} ({parameter_units[param1_name]})', 
                          fontsize=12, fontweight='bold')
-            ax.set_ylabel(f'{param2_name} ({PARAM_UNITS[param2_name]})', 
+            ax.set_ylabel(f'{param2_name} ({parameter_units[param2_name]})', 
                          fontsize=12, fontweight='bold')
             ax.set_title(f'{param1_name} vs {param2_name}', fontsize=13, fontweight='bold')
             
