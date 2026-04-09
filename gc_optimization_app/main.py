@@ -1,4 +1,4 @@
-"""Main entry point for GC temperature program optimization system"""
+"""Main entry point for GC temperature program optimization system."""
 
 
 import tkinter as tk
