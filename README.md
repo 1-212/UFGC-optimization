@@ -38,8 +38,8 @@ gc_optimization_app/
 ### 1. Clone the project
 
 ```bash
-git clone [repository URL]
-cd GC
+git clone gitgit@github.com:1-212/GC-optimization.
+pip install -e .
 ```
 
 ### 2. Install dependencies
