@@ -1,8 +1,8 @@
-# GC Optimization Project
+# UFGC Optimization Project
 
 ## Project Introduction
 
-GC Optimization is a Python application for optimizing and analyzing Gas Chromatography (GC) related data. The project provides a comprehensive set of tools including data parsing, optimization algorithms, and visualization analysis, designed to help researchers more efficiently analyze and process GC data.
+UFGC Optimization is a Python application for optimizing and analyzing Gas Chromatography (GC) related data. The project provides a comprehensive set of tools including data parsing, optimization algorithms, and visualization analysis, designed to help researchers more efficiently analyze and process GC data.
 
 ## Project Structure
 
