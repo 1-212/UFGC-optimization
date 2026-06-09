@@ -7,14 +7,14 @@ from skopt.space import Real, Integer
 # ==================== Parameter Dimensions ====================
 # Define optimization parameter search space based on experimental experience and literature
 parameter_dimensions = [
-    Real(30, 60, name='initial_temperature'),          # Initial temperature: 30-60°C (based on conventional GC methods)
-    Real(0, 10, name='initial_hold_time'),             # Initial hold time: 0-10s (ensure solvent focusing)
-    Real(0.2, 3, name='ramp_rate_1'),                  # First ramp rate: 0.2-3°C/s (separate low boiling components)
-    Real(60, 150, name='target_temperature_1'),        # First target temperature: 60-150°C (light component separation temperature)
-    Real(0, 10, name='hold_time_1'),                   # First hold time: 0-10s (ensure complete separation of light components)
-    Real(0.5, 8, name='ramp_rate_2'),                  # Second ramp rate: 0.5-8°C/s (separate heavy components)
-    Real(240, 260, name='target_temperature_2'),       # Second target temperature: 240-260°C (heavy component separation temperature)
-    Real(10, 30, name='hold_time_2')                   # Second hold time: 10-30s (ensure complete elution of heavy components)
+    Real(30, 60, name='initial_temperature'),          # Initial temperature: 30-60°C 
+    Real(0, 10, name='initial_hold_time'),             # Initial hold time: 0-10s 
+    Real(0.2, 3, name='ramp_rate_1'),                  # First ramp rate: 0.2-3°C/s 
+    Real(60, 150, name='target_temperature_1'),        # First target temperature: 60-150°C 
+    Real(0, 10, name='hold_time_1'),                   # First hold time: 0-10s 
+    Real(0.5, 8, name='ramp_rate_2'),                  # Second ramp rate: 0.5-8°C/s 
+    Real(240, 260, name='target_temperature_2'),       # Second target temperature: 240-260°C 
+    Real(10, 30, name='hold_time_2')                   # Second hold time: 10-30s 
 ]
 
 # Extract parameter names list
@@ -33,7 +33,7 @@ parameter_units = {
 }
 
 # ==================== Optimization Configuration ====================
-# Maximum initial sampling points (based on statistical significance requirements)
+# Maximum initial sampling points 
 max_initial_points = 10
 # Maximum analysis time limit (seconds), avoid excessively long analysis time
 max_analysis_time = 300
